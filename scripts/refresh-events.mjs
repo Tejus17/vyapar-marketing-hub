@@ -41,7 +41,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ── fetching with a file cache ───────────────────────────────────────────────
 let lastHit = {};
-async function get(url, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, validate = null } = {}) {
+const fixUrl = (u) => {
+  if (!u) return null;
+  const t = String(u).trim();
+  if (!t || /\s/.test(t)) return null;
+  const full = /^https?:\/\//i.test(t) ? t : `https://${t.replace(/^\/+/, '')}`;
+  try { return new URL(full).href; } catch { return null; }
+};
+async function get(rawUrl, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, validate = null } = {}) {
+  const url = fixUrl(rawUrl);
+  if (!url) return null;
   const file = path.join(CACHE, crypto.createHash('md5').update(url).digest('hex') + '.html');
   if (maxAgeDays && fs.existsSync(file) && Date.now() - fs.statSync(file).mtimeMs < maxAgeDays * 864e5) {
     const cached = fs.readFileSync(file, 'utf8');
@@ -406,6 +415,57 @@ function sameEvent(a, b) {
   return inter / Math.min(x.size, y.size) >= 0.6;
 }
 
+// ── 7. Dubai World Trade Centre (its own events database) ───────────────────
+const DWTC = 'https://www.dwtc.com';
+const DWTC_AUDIENCE = { 'Trade Only': 'B2B', Corporate: 'B2B', 'Trade and Public': 'B2B + B2C', Public: 'B2C' };
+async function collectDWTC() {
+  const pd = await get(`${DWTC}/page-data/en/events/page-data.json`, { maxAgeDays: 0.5, validate: (h) => /staticQueryHashes/.test(h) });
+  if (!pd) { console.log('  DWTC unreachable today — skipped'); return []; }
+  let items = [];
+  for (const hash of JSON.parse(pd).staticQueryHashes || []) {
+    const sq = await get(`${DWTC}/page-data/sq/d/${hash}.json`, { maxAgeDays: 0.5 });
+    if (sq && sq.includes('"allEvent"')) { items = JSON.parse(sq).data?.umbraco?.allEvent?.items || []; break; }
+  }
+  const since = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+  const t0 = new Date().toISOString().slice(0, 10);
+  const out = [];
+  for (const it of items) {
+    const start = (it.startDate || '').slice(0, 10);
+    const end = (it.endDate || it.startDate || '').slice(0, 10);
+    if (!start || end < since) continue;
+    let det = {};
+    if (end >= t0 && it.url) {
+      const raw = await get(`${DWTC}/page-data${it.url.replace(/\/?$/, '/')}page-data.json`, { maxAgeDays: DETAIL_MAX_AGE_DAYS, minGapMs: 800, validate: (h) => /"websiteURL"|"pageContent"/.test(h) });
+      if (raw) det = [...walkObj(JSON.parse(raw))].find((o) => 'websiteURL' in o || 'pageContent' in o) || {};
+    }
+    const desc = text(det.pageContent || det.metadataDescription || '').replace(/\s+/g, ' ').trim();
+    const ev = {
+      name: decode(it.title).trim(),
+      description: desc ? desc.slice(0, 600) : null,
+      country: 'UAE', city: 'Dubai', state: 'Dubai',
+      venue_name: 'Dubai World Trade Centre',
+      start_date: start, end_date: end,
+      industries: [...(it.eventSectors || []), ...(it.eventType || [])],
+      audience: DWTC_AUDIENCE[it.eventAudiences] || null,
+      website: fixUrl(det.websiteURL),
+      organisers: det.eventOrganiser ? [{ name: det.eventOrganiser, phone: null, website: null }] : [],
+      dwtc_url: `${DWTC}${it.url || ''}`,
+      dwtc_id: it.id,
+    };
+    const ff = footfallFrom(desc);
+    if (ff?.footfall) Object.assign(ev, { footfall: ff.footfall, footfall_text: ff.footfall_text, footfall_source: 'DWTC event page (organiser figure)', footfall_source_url: ev.dwtc_url });
+    if (ff?.exhibitors) ev.exhibitors = ff.exhibitors;
+    ev.niches = nichesFor(ev);
+    out.push(ev);
+  }
+  console.log(`  DWTC: ${out.length} events (past year + upcoming)`);
+  return out;
+}
+
+// Dubai World Central (DWC, Dubai South) hosts the Dubai Airshow and MEBAA — directories
+// often file them under DWTC, so put them at the right venue.
+const DWC_RE = /\b(dubai airshow|mebaa)\b/i;
+
 // ── run ─────────────────────────────────────────────────────────────────────
 // Last run's results: keep a footfall figure if the event's website is down today.
 const previous = Object.fromEntries(
@@ -452,6 +512,31 @@ for (const t of await collectTradeIndia()) {
   }
 }
 console.log(`  TradeIndia: ${tiMerged} matched EventsEye events, ${tiAdded} new`);
+
+// Pass 1c — DWTC's own calendar: richest data for Dubai (organiser, website, audience).
+let dwAdded = 0, dwMerged = 0;
+for (const t of await collectDWTC()) {
+  const match = events.find((e) => sameEvent(e, t));
+  if (match) {
+    dwMerged += 1;
+    for (const k of ['description', 'website', 'audience']) if (t[k] && (!match[k] || k === 'audience')) match[k] = t[k];
+    if (t.organisers.length && !match.organisers?.length) match.organisers = t.organisers;
+    if (!match.footfall && t.footfall) for (const k of ['footfall', 'footfall_text', 'footfall_source', 'footfall_source_url']) match[k] = t[k];
+    if (!match.exhibitors && t.exhibitors) match.exhibitors = t.exhibitors;
+    if (!match.end_date) Object.assign(match, { start_date: t.start_date, end_date: t.end_date });
+    match.industries = [...new Set([...(match.industries || []), ...t.industries])];
+    match.niches = nichesFor(match);
+  } else {
+    dwAdded += 1;
+    events.push({ ...t, dedupe_key: `dwtc:${t.dwtc_id}`, detail_url: t.dwtc_url, source_name: 'DWTC' });
+  }
+}
+console.log(`  DWTC: ${dwMerged} matched existing events, ${dwAdded} new`);
+
+for (const e of events) {
+  if (e.country === 'UAE' && DWC_RE.test(e.name)) e.venue_name = 'Dubai Airshow Site';
+  if (e.website) e.website = fixUrl(e.website);
+}
 
 // Pass 2 — footfall claims from each event's own website, 8 sites at a time.
 async function pool(items, size, fn) {

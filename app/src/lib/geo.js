@@ -25,7 +25,13 @@ export function parseLatLng(text) {
   return null;
 }
 
-export const isShortMapsLink = (text) => /maps\.app\.goo\.gl|goo\.gl\/maps/i.test(text || '');
+export const isShortMapsLink = (text) => /maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/kgs/i.test(text || '');
+
+/** "…/maps/place/POOJA+ELECTRONIC/@…" → "POOJA ELECTRONIC" */
+export const placeFromUrl = (text) => {
+  const m = decodeURIComponent(String(text || '')).match(/\/maps\/place\/([^/@?]+)/);
+  return m ? m[1].replace(/\+/g, ' ').trim() : null;
+};
 
 /** Free geocoder (OpenStreetMap Nominatim). Limited to India. */
 export async function geocode(query) {
@@ -47,14 +53,31 @@ export async function geocode(query) {
   };
 }
 
+// Short Google Maps links are expanded by a small Supabase Edge Function
+// (supabase/functions/resolve-maps-link), because browsers can't follow them.
+const FUNCTIONS = (import.meta.env.VITE_SUPABASE_URL || 'https://kpwjhooqygwypdhgwtli.supabase.co') + '/functions/v1';
+const PUBLISHABLE = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_J0r2bcrRVW8d8iduj-21GA_xVzAw5F-';
+
+export async function expandShortMapsLink(link) {
+  const res = await fetch(`${FUNCTIONS}/resolve-maps-link?url=${encodeURIComponent(link.trim())}`, {
+    headers: { apikey: PUBLISHABLE },
+  });
+  if (!res.ok) return null;
+  return res.json(); // { url, name, lat, lng }
+}
+
 /** Resolve a pasted link / coordinates / address into a point. */
 export async function resolveLocation(text) {
   const direct = parseLatLng(text);
-  if (direct) return { ...direct, label: 'Pinned location', precise: true };
+  if (direct) return { ...direct, label: placeFromUrl(text) || 'Pinned location', precise: true };
   if (isShortMapsLink(text)) {
-    throw new Error(
-      'Short Google Maps links (maps.app.goo.gl) can’t be read directly. Open the link, then copy the full URL from the address bar — or type the shop address instead.'
-    );
+    const hit = await expandShortMapsLink(text).catch(() => null);
+    if (hit?.lat != null) return { lat: hit.lat, lng: hit.lng, label: hit.name || 'Shop from Google Maps link', precise: true };
+    if (hit?.name) {
+      const g = await geocode(hit.name);
+      if (g) return { ...g, label: hit.name, precise: false };
+    }
+    throw new Error('Couldn’t read that Google Maps link right now. Try again in a moment, or type the shop’s area and city.');
   }
   const hit = await geocode(text);
   if (!hit) throw new Error('Couldn’t find that place. Add the area and city, e.g. “Lajpat Nagar, Delhi”.');

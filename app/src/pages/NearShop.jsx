@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { MapContainer, Circle, Marker, Popup, useMap } from 'react-leaflet';
 import { EnglishMap } from '../lib/tiles';
 import L from 'leaflet';
@@ -91,6 +91,16 @@ export default function NearShop() {
     };
   }, [origin, inRadius]);
 
+  // When nothing is inside the radius, find how far the closest vendors are.
+  const nearestAny = useMemo(() => {
+    if (!origin || inRadius.length) return [];
+    return vendors
+      .filter((v) => v.latitude != null && (!services.length || services.some((s) => v.services?.includes(s))))
+      .map((v) => ({ v, straight: haversineKm(origin, { lat: v.latitude, lng: v.longitude }) }))
+      .sort((a, b) => a.straight - b.straight)
+      .slice(0, 5);
+  }, [vendors, origin, inRadius.length, services]);
+
   const perKm = Number(rates[mode]) || 0;
   const results = useMemo(() => {
     return inRadius
@@ -174,7 +184,7 @@ export default function NearShop() {
                   placeholder="Paste Google Maps link, or type an address"
                 />
               </div>
-              <span className="hint">Works with a full Google Maps link, “28.56, 77.24”, or “Lajpat Nagar, Delhi”.</span>
+              <span className="hint">Paste any Google Maps link (short maps.app.goo.gl links work too), “28.56, 77.24”, or “Lajpat Nagar, Delhi”.</span>
             </div>
             <div className="row" style={{ marginTop: 12 }}>
               <button className="btn btn-primary" style={{ flex: 1 }} disabled={busy}>
@@ -302,15 +312,35 @@ export default function NearShop() {
               <p>Paste its Google Maps link on the left — you’ll get the nearest vendors with distance and trip cost.</p>
             </div>
           ) : results.length === 0 ? (
-            <div className="card empty" style={{ marginTop: 16 }}>
-              <div className="empty-icon">
-                <Search />
-              </div>
-              <h3>No vendors within {radius} km</h3>
-              <p>Widen the radius{services.length ? ' or clear the “Needs” filter' : ''}.</p>
-              <button className="btn btn-primary" style={{ marginTop: 10 }} onClick={() => setR(Math.min(500, radius * 2))}>
-                Search {Math.min(500, radius * 2)} km
-              </button>
+            <div className="card card-pad" style={{ marginTop: 16 }}>
+              <h3 className="h3" style={{ marginBottom: 4 }}>No vendors within {radius} km of {origin.label || 'this shop'}</h3>
+              {nearestAny.length > 0 ? (
+                <>
+                  <p className="sub" style={{ marginBottom: 12 }}>
+                    The closest ones in our list are {Math.round(nearestAny[0].straight)} km away (straight line):
+                  </p>
+                  <div className="vlist" style={{ marginBottom: 12 }}>
+                    {nearestAny.map(({ v, straight }) => (
+                      <div className="near-card" key={v.id} onClick={() => open(v.id)}>
+                        <div className="rank" style={{ background: 'var(--ink)' }}>{Math.round(straight)}<span style={{ fontSize: 9, marginLeft: 1 }}>km</span></div>
+                        <div style={{ minWidth: 0 }}>
+                          <div className="vname"><span>{v.name}</span></div>
+                          <div className="vplace">{[v.area, v.city].filter(Boolean).join(', ')}{v.phones?.[0] ? ` · ${v.phones[0]}` : ''}</div>
+                        </div>
+                        <span />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="row" style={{ flexWrap: 'wrap' }}>
+                    <button className="btn btn-primary btn-sm" onClick={() => setR(Math.min(500, Math.ceil((nearestAny[Math.min(2, nearestAny.length - 1)].straight + 5) / 10) * 10))}>
+                      Search {Math.min(500, Math.ceil((nearestAny[Math.min(2, nearestAny.length - 1)].straight + 5) / 10) * 10)} km instead
+                    </button>
+                    <Link to="/add" className="btn btn-sm">Add a local vendor you know</Link>
+                  </div>
+                </>
+              ) : (
+                <p className="sub">No vendors in our list for this need yet.</p>
+              )}
             </div>
           ) : (
             <>

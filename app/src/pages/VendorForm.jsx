@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Plus, Trash2, MapPin, Save, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { useStore } from '../state/store';
 import { SERVICES, CITIES, STATES } from '../lib/constants';
-import { parseLatLng, isShortMapsLink, geocode } from '../lib/geo';
+import { parseLatLng, isShortMapsLink, geocode, expandShortMapsLink } from '../lib/geo';
 import { formatPhone } from '../lib/format';
 
 const blank = {
@@ -44,7 +44,15 @@ export default function VendorForm() {
       setF((s) => ({ ...s, google_maps_url: url, latitude: p.lat, longitude: p.lng, location_precision: 'exact' }));
       setLocMsg({ ok: true, text: `Exact pin found: ${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}` });
     } else if (isShortMapsLink(url)) {
-      setLocMsg({ ok: false, text: 'Short links can’t be read. Open it and copy the full URL from the address bar — or use “Locate from address”.' });
+      setLocMsg({ ok: true, text: 'Reading the Google Maps link…' });
+      expandShortMapsLink(url)
+        .then((hit) => {
+          if (hit?.lat != null) {
+            setF((s) => ({ ...s, latitude: hit.lat, longitude: hit.lng, location_precision: 'exact', name: s.name || hit.name || '' }));
+            setLocMsg({ ok: true, text: `Exact pin found${hit.name ? ` for ${hit.name}` : ''}: ${hit.lat.toFixed(5)}, ${hit.lng.toFixed(5)}` });
+          } else setLocMsg({ ok: false, text: 'Couldn’t read that link right now — use “Locate from address” instead.' });
+        })
+        .catch(() => setLocMsg({ ok: false, text: 'Couldn’t read that link right now — use “Locate from address” instead.' }));
     } else {
       setLocMsg({ ok: false, text: 'No coordinates in this link. Use “Locate from address” below.' });
     }
