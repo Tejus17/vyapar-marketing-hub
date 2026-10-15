@@ -637,5 +637,8 @@ const eventRows = events.map((e) => ({
   organiser_website: (e.organisers || []).find((o) => o.website)?.website || null,
   website: e.website, source_name: e.source_name || (e.also_listed ? 'EventsEye + TradeIndia' : 'EventsEye'), source_url: e.detail_url, last_seen_at: now, dedupe_key: e.dedupe_key,
 }));
-await upsert('hub_events', eventRows, 'dedupe_key');
-console.log(`Uploaded ${venueRows.length} venues and ${eventRows.length} events (team status / notes untouched).`);
+// One row per key (a show can appear twice in a source listing).
+// Every row must carry the same fields (missing ones become null), one row per key.
+const uniqueRows = [...new Map(eventRows.map((r) => [r.dedupe_key, Object.fromEntries(Object.entries(r).map(([k, v]) => [k, v === undefined ? null : v]))])).values()];
+await upsert('hub_events', uniqueRows, 'dedupe_key');
+console.log(`Uploaded ${venueRows.length} venues and ${uniqueRows.length} events (team status / notes untouched).`);

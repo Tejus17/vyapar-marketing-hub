@@ -4039,9 +4039,10 @@
   ],
   "also_listed": "https://www.tradeindia.com/tradeshows/132170/castings-foundries-expo-india.html",
   "footfall": 70000,
-  "footfall_text": "expected at the venue itself as Exhibitors in 16th ENGIMACH 70000+ Visitors from diverse industrial segments expect",
+  "footfall_text": "at the venue itself as Exhibitors in 16th ENGIMACH 70000+ Visitors from diverse industrial segments",
+  "exhibitors": null,
   "footfall_source": "Event website (organiser claim)",
-  "footfall_source_url": "http://castingsandfoundries.com",
+  "footfall_source_url": "http://castingsandfoundries.com/",
   "venue_key": "nsic ground rajkot|rajkot",
   "latitude": 22.28768301772612,
   "longitude": 70.83096533663182
@@ -5508,6 +5509,11 @@
    "Beauty & personal care"
   ],
   "also_listed": "https://www.tradeindia.com/tradeshows/148573/cosmoprof-india-mumbai.html",
+  "footfall": 12977,
+  "footfall_text": "the Indian beauty industry. Cosmoprof India 2025 welcomed 12,977 buyers and professionals , marking a 17%",
+  "exhibitors": 16000,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.cosmoprofindia.com/",
   "venue_key": "jio world convention|mumbai",
   "latitude": 19.0638814,
   "longitude": 72.86631729999999
@@ -6875,6 +6881,7 @@
   "niches": [
    "Manufacturing, machinery & packaging"
   ],
+  "exhibitors": 200,
   "venue_key": "india expo mart|greater noida",
   "latitude": 28.461513696749826,
   "longitude": 77.49987602233887
@@ -15298,6 +15305,11 @@
    "Mobile, IT & tech"
   ],
   "also_listed": "https://www.tradeindia.com/tradeshows/145960/indian-dj-expo.html",
+  "footfall": 50000,
+  "footfall_text": "live demos, and unlock new business opportunities. 50 k Visitors Footfall Welcoming over 50,000+",
+  "exhibitors": 250,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.indiandjexpo.in/",
   "venue_key": "bharat mandapam|delhi",
   "latitude": 28.616077742341574,
   "longitude": 77.24360704421997
@@ -15509,6 +15521,8 @@
    "Jewellery",
    "Manufacturing, machinery & packaging"
   ],
+  "exhibitors": 330,
+  "organiser_wide_claim": true,
   "venue_key": "bombay exhibition|mumbai",
   "latitude": 19.151355760969494,
   "longitude": 72.85539507865906
@@ -15552,6 +15566,8 @@
    "Gifts, stationery & toys",
    "Manufacturing, machinery & packaging"
   ],
+  "exhibitors": 330,
+  "organiser_wide_claim": true,
   "venue_key": "bombay exhibition|mumbai",
   "latitude": 19.151355760969494,
   "longitude": 72.85539507865906
@@ -16156,6 +16172,11 @@
    "Real estate"
   ],
   "also_listed": "https://www.tradeindia.com/tradeshows/116173/matecia.html",
+  "footfall": 65000,
+  "footfall_text": "ASIA Architecture Event Saw Massive Success, 350+ Brands, 65000+ Visitors, 700+ Towns & Cities Read More How",
+  "exhibitors": 350,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://matecia.com/",
   "venue_key": "yashobhoomi|delhi",
   "latitude": 28.55609667601406,
   "longitude": 77.048187
@@ -16988,6 +17009,11 @@
    "Agriculture & agri-inputs",
    "Manufacturing, machinery & packaging"
   ],
+  "footfall": 100000,
+  "footfall_text": "Expo Asia Expected Exhibitors: More than 60 Expected Visitors: More than 1 Lakh (Progressive Farmers, Agriculture",
+  "exhibitors": null,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.dlpexpo.com/gujarat",
   "venue_key": "helipad exhibition|gandhinagar",
   "latitude": 23.22590059344395,
   "longitude": 72.64965575236204
@@ -22588,6 +22614,7 @@
    "Retail & FMCG",
    "Manufacturing, machinery & packaging"
   ],
+  "exhibitors": 300,
   "venue_key": "dubai world trade|dubai",
   "latitude": 25.222946950405568,
   "longitude": 55.28740882873535
@@ -23884,6 +23911,11 @@
    "Food, beverage & HoReCa",
    "Beauty & personal care"
   ],
+  "footfall": 6000,
+  "footfall_text": "chocolate aficionados, authors and pastry chefs. 6,000+ VISITORS 120+ EXHIBITORS 3,500 SQM EXHIBITION",
+  "exhibitors": 120,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.salonduchocolatdubai.com/",
   "latitude": 25.0742823,
   "longitude": 55.1885624
  },
@@ -23927,6 +23959,11 @@
    "Beauty & personal care",
    "Weddings & consumer shows"
   ],
+  "footfall": 22000,
+  "footfall_text": "Centre #JBA #JEWELLERYBRIDEARABIADUBAI Platinum Sponsor 22000+ Visitors 12000 SQM+ Exhibition space 450+Int'l",
+  "exhibitors": null,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://jewellerybridearabia.com/",
   "venue_key": "dubai world trade|dubai",
   "latitude": 25.222946950405568,
   "longitude": 55.28740882873535
@@ -25857,6 +25894,11 @@
   "niches": [
    "Manufacturing, machinery & packaging"
   ],
+  "footfall": 17000,
+  "footfall_text": "700 Exhibitors 15 Country Pavilions 140 Countries 17,000 Visitors Where the Region&#x27;s Wood Industry",
+  "exhibitors": 784,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.woodshowglobal.com/dubai",
   "venue_key": "dubai world trade|dubai",
   "latitude": 25.222946950405568,
   "longitude": 55.28740882873535
@@ -27350,6 +27392,7 @@
   "niches": [
    "Jewellery"
   ],
+  "exhibitors": 500,
   "venue_key": "expo sharjah|sharjah",
   "latitude": 25.310744000850523,
   "longitude": 55.37083625793457
@@ -30673,6 +30716,11 @@
   "dedupe_key": "ti:142183",
   "detail_url": "https://www.tradeindia.com/tradeshows/142183/tech-vapi.html",
   "source_name": "TradeIndia",
+  "footfall": 25000,
+  "footfall_text": "New Technologies Access B2B Industrial Networking 25k+ Expected Visitors Register Now Why Exhibit Benefits of",
+  "exhibitors": 185,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "http://www.techvapi.com/",
   "latitude": 20.3735482,
   "longitude": 72.9084376
  },
@@ -38612,6 +38660,7 @@
   "dedupe_key": "ti:153859",
   "detail_url": "https://www.tradeindia.com/tradeshows/153859/truck-trailer-tyre-expo.html",
   "source_name": "TradeIndia",
+  "exhibitors": 100,
   "venue_key": "india expo mart|greater noida",
   "latitude": 28.461513696749826,
   "longitude": 77.49987602233887
@@ -40825,6 +40874,11 @@
   "dedupe_key": "ti:126916",
   "detail_url": "https://www.tradeindia.com/tradeshows/126916/gjs-india-gem-jewellery-show.html",
   "source_name": "TradeIndia",
+  "footfall": 15000,
+  "footfall_text": "Of The Show AN INITIATIVE BY GJC 400+ EXHIBITORS 15000+ VISITORS 250,000+ SQ. FT. AREA 100+ CITIES",
+  "exhibitors": 450,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "https://www.gjsindia.org/",
   "venue_key": "jio world convention|mumbai",
   "latitude": 19.0638814,
   "longitude": 72.86631729999999
@@ -43709,6 +43763,7 @@
   "dedupe_key": "ti:127190",
   "detail_url": "https://www.tradeindia.com/tradeshows/127190/pu-tech.html",
   "source_name": "TradeIndia",
+  "exhibitors": 200,
   "latitude": 28.4670734,
   "longitude": 77.5137649
  },
@@ -45361,6 +45416,11 @@
   "dedupe_key": "ti:149690",
   "detail_url": "https://www.tradeindia.com/tradeshows/149690/garknit-x-kolkata.html",
   "source_name": "TradeIndia",
+  "footfall": 10000,
+  "footfall_text": "Machinery etc. General Review of Garknit-X Kolkata 2017 10,000+ Trade Visitors 10,000+ sq. mtr. area 250+ Products /",
+  "exhibitors": 150,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "https://vardaanevents.in/kolkata-page/",
   "latitude": 22.5726459,
   "longitude": 88.3638953
  },
@@ -45508,6 +45568,11 @@
   "dedupe_key": "ti:153719",
   "detail_url": "https://www.tradeindia.com/tradeshows/153719/matecia.html",
   "source_name": "TradeIndia",
+  "footfall": 65000,
+  "footfall_text": "ASIA Architecture Event Saw Massive Success, 350+ Brands, 65000+ Visitors, 700+ Towns & Cities Read More How",
+  "exhibitors": 350,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "https://matecia.com/",
   "venue_key": "biswa bangla mela prangan|kolkata",
   "latitude": 22.543926410908124,
   "longitude": 88.39440791433708
@@ -47143,6 +47208,11 @@
   "detail_url": "https://www.tradeindia.com/tradeshows/146456/north-east-wood-expo.html",
   "source_name": "TradeIndia",
   "also_listed": "https://www.tradeindia.com/tradeshows/142288/north-east-build-expo.html",
+  "footfall": 12000,
+  "footfall_text": "the North-East Build Expo, this B2B event attracted over 12,000+ trade visitors from across North-East India and",
+  "exhibitors": 150,
+  "footfall_source": "Event website (organiser claim)",
+  "footfall_source_url": "https://northeastwoodexpo.com/",
   "latitude": 26.1805978,
   "longitude": 91.753943
  },
