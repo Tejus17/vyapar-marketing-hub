@@ -1,0 +1,473 @@
+[
+  {
+    "name": "Meena Arts",
+    "phones": [],
+    "address": "Shop No 3, Near Anjuman Hospital, Main Road, Ranchi - 834001",
+    "area": "Main Road",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2005",
+    "source_name": "Aajjo",
+    "source_url": "https://www.aajjo.com/product/acp-led-signage-board-in-ranchi-meena-arts",
+    "description": "ACP LED signage, backlit signs, acrylic letters, name plates"
+  },
+  {
+    "name": "Admax Graphic (Bee Twoo Infotainment Pvt Ltd)",
+    "phones": [],
+    "address": "Behind Samsung Showroom, Circular Road, Lalpur, Ranchi",
+    "area": "Lalpur",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": 3.9,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/admax-graphic-bee-twoo-infotainment/",
+    "description": "Acrylic LED sign boards"
+  },
+  {
+    "name": "Sai Graphics",
+    "phones": [],
+    "address": "Haldhar Press Lane, 1st Floor, Shiv Kripa Building, Ranchi",
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/sai-graphicsranchi/",
+    "description": "Flex banners"
+  },
+  {
+    "name": "Tamanna Sales",
+    "phones": [],
+    "address": "23K3, Amrud Bagan, Ratu Road, Ranchi",
+    "area": "Ratu Road",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/tamanna-sales/",
+    "description": "Flex banner advertising"
+  },
+  {
+    "name": "Multi Ad.",
+    "phones": [],
+    "address": "Shop No 13 A, Market Complex, Dhurwa, Ranchi - 834004",
+    "area": "Dhurwa",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834004",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/multi-ad/",
+    "description": "Flex banner printing"
+  },
+  {
+    "name": "New Concept Advertising & Marketing",
+    "phones": [],
+    "address": "Maha Laxmi Complex, Ground Floor, Beside M.R. Tower, Line Tank Road, Ahirtoli, Ranchi",
+    "area": "Ahirtoli",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/new-concept-advertising-marketing/",
+    "description": "Flex banner printing services"
+  },
+  {
+    "name": "Media Express",
+    "phones": [
+      "+91 80438 16000"
+    ],
+    "address": "Bouli Tola, Pundag, Ranchi - 834004",
+    "area": "Pundag",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834004",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards",
+      "Standees",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "LED glow sign board",
+        "price": 200,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Glow sign board",
+        "price": 170,
+        "price_max": 210,
+        "unit": "sq ft"
+      },
+      {
+        "item": "ACP signage with acrylic letters",
+        "price": 650,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Outdoor hoarding flex board",
+        "price": 45,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Roll-up standee",
+        "price": 1200,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2015",
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/media-express/products.html",
+    "description": "Glow sign, ACP, backlit and non-lit flex boards, roll-up and digital standees"
+  },
+  {
+    "name": "Think Digital",
+    "phones": [],
+    "address": "Pundag, Near IIM College, Kathal More, Ranchi",
+    "area": "Kathal More",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndianYellowPages",
+    "source_url": "https://www.indianyellowpages.com/ranchi/think-digital-13669706/",
+    "description": "Glow sign boards, indoor and outdoor branding"
+  },
+  {
+    "name": "Smart Print",
+    "phones": [
+      "+91 80438 18276"
+    ],
+    "address": "H. B. Road, Near Srilok Complex, Tharpakhna, Ranchi - 834001",
+    "area": "Tharpakhna",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Flex boards",
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/smart-print-ranchi",
+    "description": "Flex printing, banners and glow sign boards"
+  },
+  {
+    "name": "D C Prints",
+    "phones": [
+      "+91 80438 91588"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/dc-prints/",
+    "description": "Flex board printing, flex and banner print"
+  },
+  {
+    "name": "Span Art",
+    "phones": [
+      "+91 80445 66532"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/span-art/",
+    "description": "Glow sign board printing, commercial LED sign boards, outdoor flex sign boards"
+  },
+  {
+    "name": "Akash Printing Press",
+    "phones": [
+      "+91 79032 53459"
+    ],
+    "address": null,
+    "area": "Ashok Nagar",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Flex boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Yappe",
+    "source_url": "https://yappe.in/jharkhand/ranchi/akash-printing-press/288756",
+    "description": "Digital, screen and offset printing, signage and flex printing"
+  },
+  {
+    "name": "Unique Arts",
+    "phones": [
+      "+91 80476 35835"
+    ],
+    "address": "Tanzeem Nagar, Near Akbari Masjid, Hindpiri, Ranchi - 834001",
+    "area": "Hindpiri",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "ACP LED sign board",
+        "price": 16000,
+        "price_max": null,
+        "unit": "piece"
+      },
+      {
+        "item": "2D ACP LED sign board",
+        "price": 400,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2017",
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/uniquearts-ranchi",
+    "description": "LED sign boards, ACP LED boards and name plates"
+  },
+  {
+    "name": "S F Art Gallery",
+    "phones": [
+      "+91 79493 39761"
+    ],
+    "address": "Ground Floor, Gudri Bazar, Lower Bazar, Ranchi - 834001",
+    "area": "Lower Bazar",
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": "834001",
+    "services": [
+      "Backlit / Light boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [
+      {
+        "item": "Blue acrylic neon sign board",
+        "price": 600,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "3D LED vinyl glow sign board",
+        "price": 630,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "18mm acrylic neon sign board",
+        "price": 700,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "P10 LED module board",
+        "price": 2000,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/sf-artgallery/profile.html",
+    "description": "LED boards, LED letters, neon and 3D vinyl glow sign boards"
+  },
+  {
+    "name": "P P Enterprises",
+    "phones": [
+      "+91 80475 43618"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters",
+      "Flex boards"
+    ],
+    "rates": [
+      {
+        "item": "Multicolour printed flex sign board",
+        "price": 60,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2009",
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/city/ranchi/flex-board.html",
+    "description": "LED sign boards, acrylic letters and flex sign boards"
+  },
+  {
+    "name": "Graphix World",
+    "phones": [
+      "+91 80476 90725"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/city/ranchi/flex-board.html",
+    "description": "Sign boards and signage solutions"
+  },
+  {
+    "name": "SS Add",
+    "phones": [
+      "+91 80451 68273"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Ranchi",
+    "state": "Jharkhand",
+    "pincode": null,
+    "services": [
+      "Flex boards",
+      "Vinyl & creatives",
+      "Standees",
+      "Backlit / Light boards"
+    ],
+    "rates": [
+      {
+        "item": "Solvent flex printing",
+        "price": 6,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Vinyl banner printing",
+        "price": 16,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Promotional roll-up standee",
+        "price": 1000,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": 3,
+    "established": "2017",
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/ss-add/visiting-card.html",
+    "description": "Printing and advertising; sign boards, roll-up standees, flex and vinyl printing"
+  }
+]

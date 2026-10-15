@@ -1,0 +1,69 @@
+import { useMemo } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
+import { CITIES } from '../lib/constants';
+
+// Free OpenStreetMap tiles; desaturated in CSS (.map-muted) so the red city bubbles stand out.
+const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const ATTR = '&copy; OpenStreetMap contributors';
+
+/** One bubble per city, sized by how many vendors we have there. */
+export default function IndiaMap({ vendors }) {
+  const navigate = useNavigate();
+
+  const bubbles = useMemo(() => {
+    const byCity = new Map();
+    for (const v of vendors) {
+      const c = byCity.get(v.city) || { city: v.city, state: v.state, n: 0, backlit: 0, lat: 0, lng: 0, pts: 0 };
+      c.n += 1;
+      if (v.services?.includes('Backlit / Light boards')) c.backlit += 1;
+      if (v.latitude != null) {
+        c.lat += v.latitude;
+        c.lng += v.longitude;
+        c.pts += 1;
+      }
+      byCity.set(v.city, c);
+    }
+    return [...byCity.values()]
+      .map((c) => {
+        const known = CITIES[c.city];
+        const lat = known ? known.lat : c.pts ? c.lat / c.pts : null;
+        const lng = known ? known.lng : c.pts ? c.lng / c.pts : null;
+        return { ...c, lat, lng };
+      })
+      .filter((c) => c.lat != null)
+      .sort((a, b) => b.n - a.n);
+  }, [vendors]);
+
+  const max = Math.max(1, ...bubbles.map((b) => b.n));
+
+  return (
+    <MapContainer
+      bounds={[[7.5, 68.5], [33.5, 95.5]]}
+      boundsOptions={{ padding: [12, 12] }}
+      zoomSnap={0.1}
+      minZoom={4}
+      scrollWheelZoom={false}
+      style={{ height: '100%', width: '100%' }}
+      className="map-muted"
+      attributionControl
+    >
+      <TileLayer url={TILES} attribution={ATTR} />
+      {bubbles.map((b) => (
+        <CircleMarker
+          key={b.city}
+          center={[b.lat, b.lng]}
+          radius={7 + 19 * Math.sqrt(b.n / max)}
+          pathOptions={{ color: '#ffffff', weight: 2, fillColor: '#E8213E', fillOpacity: 0.78 }}
+          eventHandlers={{ click: () => navigate(`/vendors?city=${encodeURIComponent(b.city)}`) }}
+        >
+          <Tooltip direction="top" offset={[0, -6]}>
+            <b>{b.city}</b> · {b.n} vendor{b.n === 1 ? '' : 's'}
+            <br />
+            <span style={{ color: '#6b6f78' }}>{b.backlit} make backlit / light boards</span>
+          </Tooltip>
+        </CircleMarker>
+      ))}
+    </MapContainer>
+  );
+}

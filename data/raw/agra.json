@@ -1,0 +1,555 @@
+[
+  {
+    "name": "M/s Reliable Events And Promotions",
+    "phones": [],
+    "address": "Shop No. 8, 2 Floor, Block 15, Cloth Market, Sanjay Place, Agra - 282002",
+    "area": "Sanjay Place",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "ACP & 3D letters",
+      "Flex boards",
+      "Standees"
+    ],
+    "rates": [
+      {
+        "item": "Acrylic ACP Sign Board",
+        "price": 500,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Printed PVC Flex Sign Board",
+        "price": 141,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Advertising Roll Up Standee",
+        "price": 1193,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/sign-boards.htm",
+    "description": "Acrylic ACP sign boards and printed flex sign boards"
+  },
+  {
+    "name": "Krishna Metal Arts",
+    "phones": [],
+    "address": "Block No C5, Shop No 13, 1st Floor, Cloth Market, Civil Lines, Agra",
+    "area": "Civil Lines",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "LED Sign Board Letter",
+        "price": 102,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/sign-boards.htm",
+    "description": "LED sign board letters"
+  },
+  {
+    "name": "Diva Advertiser",
+    "phones": [],
+    "address": "58, Old Vijay Nagar Colony, Agra - 282004",
+    "area": "Vijay Nagar Colony",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282004",
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": 3.8,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/sign-boards.htm",
+    "description": "Sign boards (wholesale supplier)"
+  },
+  {
+    "name": "Pankh Advertisers",
+    "phones": [],
+    "address": "1st Floor, M.S Market, Sarla Bagh, Dayal Bagh, Agra",
+    "area": "Dayal Bagh",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/sign-boards.htm",
+    "description": "Advertising sign boards"
+  },
+  {
+    "name": "Sharma Plastic",
+    "phones": [],
+    "address": "Shop No. 86, Indira Colony, Near Rajeev Cinema, Shahganj, Agra - 282010",
+    "area": "Shahganj",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282010",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/sign-boards.htm",
+    "description": "Acrylic sign boards, flexi sign boards and acrylic LED sign boards"
+  },
+  {
+    "name": "Glow Ad World",
+    "phones": [],
+    "address": "46/90F, Behind Prabhu Cinema, Laxmi Nagar, Jagdish Pura, Loha Mandi, Agra",
+    "area": "Lakshmi Nagar",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/glow-adworld/contact-us.htm",
+    "description": "Glow signs and retro-reflective sign boards"
+  },
+  {
+    "name": "Gayatri Led Boards",
+    "phones": [],
+    "address": "B No - 16/47A/1B/K-1, Hajjupura, Tajganj, Agra - 282001 (also listed: Fatehabad Road, Opposite Subway Restaurant)",
+    "area": "Fatehabad Road",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282001",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards"
+    ],
+    "rates": [
+      {
+        "item": "Plain Flex Sign Board (wood frame)",
+        "price": 50,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/4x2-feet-plain-flex-sign-board-for-advertising-purpose-8416401.html",
+    "description": "LED moving sign boards"
+  },
+  {
+    "name": "I.S. Creations",
+    "phones": [],
+    "address": "F-71 Site-C, Sikandra Industrial Area, Agra",
+    "area": "Sikandra",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agra/flex-printing-services.htm",
+    "description": "Flex printing services"
+  },
+  {
+    "name": "Flame Productions",
+    "phones": [],
+    "address": "46/90 F33 Laxmi Nagar, Jagdishpura Thana, Near Prabhoo Talkies, Agra - 282002 (TradeIndia lists: Block No. 5, Shop No. 11, Ground Floor, Cloth Market, Sanjay Place, Agra - 282002)",
+    "area": "Laxmi Nagar",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "Crystal Sign Board",
+        "price": 200,
+        "price_max": null,
+        "unit": "inch"
+      },
+      {
+        "item": "LED Sign Board",
+        "price": 100,
+        "price_max": null,
+        "unit": "inch"
+      },
+      {
+        "item": "LED Neon Sign Board",
+        "price": 1500,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Graphics Green Led Glow Sign Board With Letter",
+        "price": 53,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Alphabet Stainless Steel Letter Sign Board",
+        "price": 71,
+        "price_max": 77,
+        "unit": "inch"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2017",
+    "source_name": "ExportersIndia",
+    "source_url": "https://www.exportersindia.com/flame-productions/contact-us.htm",
+    "description": "LED, crystal, neon and glow sign boards, stainless steel letters (contact Rahul Aggarwal)"
+  },
+  {
+    "name": "Balaji Media & Graphics",
+    "phones": [],
+    "address": "Plot No-5/35, Shiv Niketan, Madia Katra, Agra - 282002",
+    "area": "Madia Katra",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "ExportersIndia",
+    "source_url": "https://www.exportersindia.com/agra/flex-printing-services.htm",
+    "description": "Flex printing service"
+  },
+  {
+    "name": "Sanvi Advertising",
+    "phones": [],
+    "address": "Shop No. 15, Basement, Block No. 23, Cloth Market, Sanjay Place, Agra - 282002",
+    "area": "Sanjay Place",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Flex boards",
+      "Backlit / Light boards",
+      "ACP & 3D letters",
+      "Standees"
+    ],
+    "rates": [
+      {
+        "item": "Glow LED Sign Board",
+        "price": 160,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "Designer ACP Sign Board",
+        "price": 550,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2023",
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/glow-led-sign-board-c8347069.html",
+    "description": "Glow LED and ACP sign boards, neon signs, LED display boards, roll-up standees and flex printing"
+  },
+  {
+    "name": "Ink Shine Printers",
+    "phones": [],
+    "address": "19, 19A 20 Puspanjali Puram Phase 4, Near Nalanda Estate, Taj Nagari, Agra",
+    "area": "Taj Nagari",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Flex boards",
+      "Vinyl & creatives",
+      "ACP & 3D letters",
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2015",
+    "source_name": "IndianYellowPages",
+    "source_url": "https://www.indianyellowpages.com/agra/ink-shine-printers-14933598/",
+    "description": "Flex printing, vinyl flex banners, neon sign boards, ACP boards and digital printing (contact Saurabh Saxena)"
+  },
+  {
+    "name": "Agarwal Advertising",
+    "phones": [],
+    "address": "Om Bihar, Gummat, Kamla Nagar, Agra",
+    "area": "Kamla Nagar",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [
+      {
+        "item": "Led Board",
+        "price": 105,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/agarwal-advertising/contact-us.htm",
+    "description": "LED boards"
+  },
+  {
+    "name": "Global Overseas",
+    "phones": [],
+    "address": "No. 1/9/2, Sahitya Kunj, Raja Mandi, M. G. Road, Agra - 282002",
+    "area": "Raja Mandi",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/global-overseas/contact-us.htm",
+    "description": "Display items and signages"
+  },
+  {
+    "name": "Sai Add Advertising",
+    "phones": [],
+    "address": "Sanjay Place, Agra Cantonment, Agra - 282002",
+    "area": "Sanjay Place",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "ACP LED Sign Board",
+        "price": 500,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/acp-led-sign-board-9574349.html",
+    "description": "ACP LED sign boards"
+  },
+  {
+    "name": "Shiv Ananta Advertising",
+    "phones": [],
+    "address": "C-496, Trans Yamuna Colony, Agra - 282006",
+    "area": "Trans Yamuna Colony",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282006",
+    "services": [
+      "ACP & 3D letters",
+      "Backlit / Light boards"
+    ],
+    "rates": [
+      {
+        "item": "ACP Sign Boards",
+        "price": 850,
+        "price_max": null,
+        "unit": "sq ft"
+      },
+      {
+        "item": "20mm Acrylic Sign Board",
+        "price": 350,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/acp-sign-boards-8768260.html",
+    "description": "ACP sign boards and acrylic sign boards"
+  },
+  {
+    "name": "Aitco Neon Signs",
+    "phones": [],
+    "address": "Plot No. 5, Old Vijay Nagar Colony, Agra - 282004",
+    "area": "Vijay Nagar Colony",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282004",
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": 4.3,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/neon-sign-boards-4109828.html",
+    "description": "Neon sign boards and electronic LED display sign boards"
+  },
+  {
+    "name": "Add World Outdoor Advertising",
+    "phones": [],
+    "address": "B No 23/8, Wazirpura, Agra - 282003",
+    "area": "Wazirpura",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282003",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards"
+    ],
+    "rates": [
+      {
+        "item": "Glow Sign Board Printing Services (acrylic, LED)",
+        "price": 250,
+        "price_max": null,
+        "unit": "unit"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/glow-sign-board-printing-services-8361884.html",
+    "description": "Acrylic LED glow sign boards and flex printing services"
+  },
+  {
+    "name": "Flex World",
+    "phones": [],
+    "address": "Plot No- 37-B / 46, Kalpnidhi Tower, Near Hotel Metro, Sanjay Place, Agra - 282002",
+    "area": "Sanjay Place",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards",
+      "Standees"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2004",
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/glow-sign-board-c2901827.html",
+    "description": "Glow sign boards, painted sign boards, digital standee flex printing"
+  },
+  {
+    "name": "3Brand Innovation",
+    "phones": [],
+    "address": "Shop No-7, Block No 20, First Floor, Shoe Market, Near St. Peter's College, Agra - 282002",
+    "area": "Near St. Peter's College",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": "282002",
+    "services": [
+      "Vinyl & creatives",
+      "Flex boards",
+      "Standees",
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "TradeIndia",
+    "source_url": "https://www.tradeindia.com/products/flex-glow-signage-board-c5470940.html",
+    "description": "Vinyl sign boards, hoardings, flex roll-up standees and flex glow sign boards"
+  },
+  {
+    "name": "Hina Art",
+    "phones": [],
+    "address": "40G/190, Sky Tower, Sanjay Place, Agra",
+    "area": "Sanjay Place",
+    "city": "Agra",
+    "state": "Uttar Pradesh",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndianYellowPages",
+    "source_url": "https://www.indianyellowpages.com/agra/hina-art-11637293/",
+    "description": "Outdoor advertising and flex printing (contact Mutaf Khan)"
+  }
+]

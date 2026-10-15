@@ -1,0 +1,33 @@
+# Daily refresh of the Expos section (new events, changed dates, footfall claims).
+# Runs on GitHub's free runners — no computer needs to stay on.
+# Setup: repo → Settings → Secrets and variables → Actions → add
+#   SUPABASE_URL          https://kpwjhooqygwypdhgwtli.supabase.co
+#   SUPABASE_SECRET_KEY   (the sb_secret_… key — never commit it)
+name: Refresh expos
+
+on:
+  schedule:
+    - cron: '30 1 * * *' # 07:00 IST every day
+  workflow_dispatch: {} # "Run workflow" button for an on-demand refresh
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Keep fetched pages + last results between runs so each day only reads what changed.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            data/events
+            data/geocode-cache.json
+          key: expos-${{ github.run_id }}
+          restore-keys: expos-
+      - run: node scripts/refresh-events.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}

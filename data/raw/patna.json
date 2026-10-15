@@ -1,0 +1,453 @@
+[
+  {
+    "name": "Dipsree Electronics",
+    "phones": [],
+    "address": "Kankarbagh Main Road, Kankarbagh, Patna",
+    "area": "Kankarbagh",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/dipsree-electronics/",
+    "description": "LED moving sign boards"
+  },
+  {
+    "name": "Print Mart India Pvt. Ltd.",
+    "phones": [],
+    "address": "No-301, Sumati Place, Boring Road, Patna",
+    "area": "Boring Road",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/print-mart-india-pvt-ltd/",
+    "description": "Flex banner printing"
+  },
+  {
+    "name": "Door Darshan Marketing",
+    "phones": [],
+    "address": "South Sikander Manzil, Fraser Road, Patna",
+    "area": "Fraser Road",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/door-darshan-marketing/",
+    "description": "Flex banners"
+  },
+  {
+    "name": "M/s Poonam Printing Press",
+    "phones": [],
+    "address": "Sandalpur, Near Sanichra Mandir, Patna - 800006",
+    "area": "Sandalpur",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800006",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "Dial4Trade",
+    "source_url": "https://www.dial4trade.com/ms-poonam-printing-press/",
+    "description": "Flex banner printing service"
+  },
+  {
+    "name": "Raja Signage",
+    "phones": [
+      "+91 79493 30089"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "ACP LED signage board",
+        "price": 180,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/raja-signage",
+    "description": "LED acrylic sign boards, ACP LED signage and acrylic letters"
+  },
+  {
+    "name": "Stylish Decor",
+    "phones": [
+      "+91 80444 58659"
+    ],
+    "address": "M 11, Emarat Firdaus, Exhibition Road, Patna - 800001",
+    "area": "Exhibition Road",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800001",
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/stylish-decor/testimonial.html",
+    "description": "Sign boards, signage boards and acrylic letters"
+  },
+  {
+    "name": "M/Z Aroma Advertising And Marketing Agency",
+    "phones": [
+      "+91 80440 17191"
+    ],
+    "address": "D S Bhawan Lane, Chiraiyatal Pul, Patna - 800008",
+    "area": "Chiraiyatand",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800008",
+    "services": [
+      "Backlit / Light boards",
+      "Flex boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/aroma-patna",
+    "description": "Glow sign boards, flex boards, printing and brand merchandising"
+  },
+  {
+    "name": "JKP Printing Advertising",
+    "phones": [
+      "+91 80410 11630"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/jkpprintingadvertising",
+    "description": "Sign boards and LED letter signs"
+  },
+  {
+    "name": "Hari Om Media",
+    "phones": [
+      "+91 80445 66813"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/company/53345334",
+    "description": "Unipole and billboard sign boards"
+  },
+  {
+    "name": "Aryan Grafix",
+    "phones": [],
+    "address": "Sharma Market, Exhibition Road, Near Kankarbagh, Patna",
+    "area": "Kankarbagh",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "Standees",
+      "Vinyl & creatives",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2003",
+    "source_name": "IndianYellowPages",
+    "source_url": "https://www.indianyellowpages.com/patna/aryan-grafix-kankarbagh-patna-16118011/",
+    "description": "Glow sign boards, roll-up standees, vinyl printing, LED acrylic letters, in-shop branding"
+  },
+  {
+    "name": "Ranjit Signage",
+    "phones": [],
+    "address": "Bhattacharya Road, Patna",
+    "area": "Bhattacharya Road",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [
+      {
+        "item": "LED acrylic ACP sign board",
+        "price": 600,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://www.indiamart.com/ranjit-signage-patna/",
+    "description": "LED acrylic ACP sign boards, LED and steel letters"
+  },
+  {
+    "name": "Blueprint Graphy",
+    "phones": [],
+    "address": "Al Sameeha Complex, Near Sahu Samaj Bhawan, Bihari Saw Lane, Langar Toli, Patna",
+    "area": "Langar Toli",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Backlit / Light boards",
+      "Standees",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "2010",
+    "source_name": "IndianYellowPages",
+    "source_url": "https://www.indianyellowpages.com/patna/blueprint-graphy-langar-toli-patna-10654072/",
+    "description": "Glow sign boards, roll-up standees and canopy printing"
+  },
+  {
+    "name": "Impression Imaging Services",
+    "phones": [
+      "+91 79427 12830"
+    ],
+    "address": "G, Krishna Compound, Frazer Road, Behind Hotel Rajasthan, Patna - 800001",
+    "area": "Fraser Road",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800001",
+    "services": [
+      "Flex boards",
+      "Vinyl & creatives"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": "1998",
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/impressionimagingservices/profile.html",
+    "description": "Printing, flex and banner printing, advertising and graphic design"
+  },
+  {
+    "name": "Netprint",
+    "phones": [
+      "+91 80438 75684"
+    ],
+    "address": null,
+    "area": "Gardanibagh",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Standees",
+      "Flex boards"
+    ],
+    "rates": [
+      {
+        "item": "Digital standee printing (3x6 ft flex)",
+        "price": 1450,
+        "price_max": null,
+        "unit": "piece"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/netprint/testimonial.html",
+    "description": "Digital standee printing and flex printing across Bihar and Jharkhand"
+  },
+  {
+    "name": "Arian Arts",
+    "phones": [
+      "+91 80438 45022"
+    ],
+    "address": "Kadam Kuan, Patna - 800003",
+    "area": "Kadam Kuan",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800003",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/arian-arts",
+    "description": "Banner printing, flex printing and advertising printing"
+  },
+  {
+    "name": "Sunshine Printech Private Limited",
+    "phones": [
+      "+91 80445 66861"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800027",
+    "services": [
+      "Flex boards",
+      "ACP & 3D letters"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/sunshine-printech/other-services.html",
+    "description": "Flex printing, ACP work and 3D letters"
+  },
+  {
+    "name": "Vikash Fabrication",
+    "phones": [
+      "+91 80477 82547"
+    ],
+    "address": "Vaishali Market, Karbigahiya, Patna - 800001",
+    "area": "Karbigahiya",
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "800001",
+    "services": [
+      "Flex boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/vikash-fabrications",
+    "description": "Flex printing and fabrication services"
+  },
+  {
+    "name": "G.D. Advertising",
+    "phones": [
+      "+91 80451 69674"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": "804453",
+    "services": [
+      "Flex boards",
+      "Standees",
+      "Backlit / Light boards"
+    ],
+    "rates": [],
+    "website": null,
+    "google_maps_url": null,
+    "rating": null,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/gdadvertising",
+    "description": "Sign boards, flex boards, roll-up standees, wall lights"
+  },
+  {
+    "name": "Nandani Media",
+    "phones": [
+      "+91 80476 67546"
+    ],
+    "address": null,
+    "area": null,
+    "city": "Patna",
+    "state": "Bihar",
+    "pincode": null,
+    "services": [
+      "Flex boards",
+      "Backlit / Light boards",
+      "Standees",
+      "Vinyl & creatives"
+    ],
+    "rates": [
+      {
+        "item": "Dealer flex board (MS frame, front-lit)",
+        "price": 40,
+        "price_max": null,
+        "unit": "sq ft"
+      }
+    ],
+    "website": null,
+    "google_maps_url": null,
+    "rating": 4.2,
+    "established": null,
+    "source_name": "IndiaMART",
+    "source_url": "https://m.indiamart.com/city/patna/flex-board.html",
+    "description": "Flex boards, light boards, stand boards, arch gates, roll-up standees and shop branding across Bihar and Jharkhand"
+  }
+]
