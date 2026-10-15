@@ -635,3 +635,25 @@ body { font-size: 13.5px; }
   .venues-grid { grid-template-columns: 1fr; gap: 14px; }
   .venues-map { height: 280px; position: static; }
 }
+
+/* ══ Events map: bigger, interactive, right column ══ */
+.ev-layout { grid-template-columns: 250px minmax(0, 1fr) 340px; }
+@media (min-width: 1600px) { .ev-layout { grid-template-columns: 270px minmax(0, 1fr) 420px; } }
+.radar-wrap { position: sticky; top: 64px; }
+.ev-aside { position: static; }
+.radar { width: 100%; height: min(460px, calc(100vh - 150px)); background: #fbf8f5; }
+@media (min-width: 1600px) { .radar { height: min(560px, calc(100vh - 150px)); } }
+.radar .leaflet-control-zoom a { width: 28px; height: 28px; line-height: 26px; font-size: 16px; }
+.map-fit {
+  position: absolute; top: 76px; left: 10px; z-index: 800; width: 30px; height: 30px; border-radius: 4px;
+  border: 2px solid rgba(0,0,0,.2); background: #fff; display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.map-fit svg { width: 14px; height: 14px; color: #333; }
+.map-fit:hover { background: #f4f4f4; }
+.leaflet-tooltip { font-family: 'Poppins', system-ui, sans-serif; font-size: 12px; max-width: 260px; white-space: normal; }
+.hero-map .leaflet-container { background: #fff; }
+@media (max-width: 1180px) {
+  .ev-layout { grid-template-columns: 240px minmax(0, 1fr); }
+  .ev-aside { display: none; }
+}
+@media (max-width: 860px) { .ev-layout { display: block; } }

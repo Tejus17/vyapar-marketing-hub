@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
+import { IndiaOnlyMap } from '../components/IndiaShape';
 import { Building2, Search } from 'lucide-react';
 import { useExpos } from '../state/expos';
 import { useExpoDrawers } from '../state/drawer';
@@ -50,8 +51,8 @@ export default function ExpoVenues() {
 
       <div className="grid venues-grid">
         <div className="near-map venues-map">
-          <MapContainer key={country} bounds={BOUNDS[country]} scrollWheelZoom className="map-muted" style={{ height: '100%' }}>
-            <TileLayer url={TILES} attribution="&copy; OpenStreetMap contributors" />
+          <MapContainer key={country} bounds={BOUNDS[country]} zoomSnap={0.25} scrollWheelZoom className={country === 'India' ? '' : 'map-muted'} style={{ height: '100%' }}>
+            {country === 'India' ? <IndiaOnlyMap /> : <TileLayer url={TILES} attribution="&copy; OpenStreetMap contributors" />}
             {list.filter((v) => v.latitude != null).map((v) => {
               const n = upcomingBy[v.id]?.length || 0;
               return (

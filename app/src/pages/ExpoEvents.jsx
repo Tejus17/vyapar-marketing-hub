@@ -316,7 +316,18 @@ export default function ExpoEvents() {
 
         {/* Right: small radar map */}
         <aside className="ev-aside" aria-label="Map of these events">
-          <RadarMap events={filtered} country={f.country === 'all' ? 'all' : f.country} />
+          <RadarMap
+            events={filtered}
+            country={f.country === 'all' ? 'all' : f.country}
+            city={f.city}
+            activeVenue={f.venue}
+            onPickVenue={(venue, city) => update({ city, venue: f.venue === venue ? '' : venue })}
+          />
+          {f.venue && (
+            <button className="btn btn-sm btn-ghost" style={{ marginTop: 6 }} onClick={() => set('venue', '')}>
+              Show all venues again
+            </button>
+          )}
         </aside>
       </div>
     </div>

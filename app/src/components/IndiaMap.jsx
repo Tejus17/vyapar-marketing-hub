@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { MapContainer, CircleMarker, Tooltip } from 'react-leaflet';
-import IndiaShape, { INDIA_BOUNDS } from './IndiaShape';
+import { IndiaOnlyMap, INDIA_BOUNDS } from './IndiaShape';
 import { useNavigate } from 'react-router-dom';
 import { CITIES } from '../lib/constants';
 
@@ -43,11 +43,8 @@ export default function IndiaMap({ vendors }) {
       scrollWheelZoom={false}
       style={{ height: '100%', width: '100%' }}
       attributionControl={false}
-      dragging={false}
-      doubleClickZoom={false}
-      zoomControl={false}
     >
-      <IndiaShape />
+      <IndiaOnlyMap />
       {bubbles.map((b) => (
         <CircleMarker
           key={b.city}
