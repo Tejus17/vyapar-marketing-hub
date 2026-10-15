@@ -13,14 +13,15 @@ on:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 300 # the first run reads every page; later runs reuse the cache
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       # Keep fetched pages + last results between runs so each day only reads what changed.
-      - uses: actions/cache@v4
+      # Saved even when a run fails or times out, so the next run continues where this one stopped.
+      - uses: actions/cache/restore@v4
         with:
           path: |
             data/events
@@ -28,6 +29,14 @@ jobs:
           key: expos-${{ github.run_id }}
           restore-keys: expos-
       - run: node scripts/refresh-events.mjs
+        timeout-minutes: 280
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            data/events
+            data/geocode-cache.json
+          key: expos-${{ github.run_id }}
