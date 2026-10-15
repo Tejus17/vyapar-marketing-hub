@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, CircleMarker, Tooltip, useMap } from 'react-leaflet';
+import { EnglishMap } from '../lib/tiles';
 import { Maximize2 } from 'lucide-react';
 import { IndiaOnlyMap, INDIA_BOUNDS } from './IndiaShape';
 
@@ -68,11 +69,11 @@ export default function RadarMap({ events, country, city, onPickVenue, activeVen
   return (
     <div className="radar-wrap">
       <div className="radar">
-        <MapContainer bounds={bounds} zoomSnap={0.25} scrollWheelZoom style={{ height: '100%' }} attributionControl={false}>
+        <MapContainer bounds={bounds} zoomSnap={0.25} scrollWheelZoom style={{ height: "100%" }}>
           {country === 'India' ? (
             <IndiaOnlyMap background="#fbf8f5" />
           ) : (
-            <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" className="map-muted" />
+            <EnglishMap />
           )}
           <Fitter bounds={bounds} signal={`${country}|${city}`} />
           <FitButton bounds={bounds} />

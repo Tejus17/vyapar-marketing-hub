@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, Circle, Marker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, Circle, Marker, Popup, useMap } from 'react-leaflet';
+import { EnglishMap } from '../lib/tiles';
 import L from 'leaflet';
 import { MapPinned, LocateFixed, Search, Route, AlertCircle, Navigation, Star, BadgeCheck, Info } from 'lucide-react';
 import { useStore, readLocal, writeLocal } from '../state/store';
@@ -10,8 +11,6 @@ import { resolveLocation, haversineKm, roadDistances, estimateRoadKm, directions
 import { km, minutes, rupees, lowestSqftRate } from '../lib/format';
 import { ServiceTags } from '../components/VendorRow';
 
-const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const ATTR = '&copy; OpenStreetMap contributors';
 const MAX_ROUTED = 25;
 
 const shopIcon = L.divIcon({
@@ -265,7 +264,7 @@ export default function NearShop() {
         <div>
           <div className="near-map">
             <MapContainer center={origin ? [origin.lat, origin.lng] : [22.6, 80.2]} zoom={origin ? 12 : 4.6} scrollWheelZoom style={{ height: '100%' }}>
-              <TileLayer url={TILES} attribution={ATTR} />
+              <EnglishMap />
               {origin && (
                 <>
                   <FitTo origin={origin} radius={radius} />

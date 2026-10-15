@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
+import { MapContainer, CircleMarker, Tooltip } from 'react-leaflet';
+import { EnglishMap } from '../lib/tiles';
 import { IndiaOnlyMap } from '../components/IndiaShape';
 import { Building2, Search } from 'lucide-react';
 import { useExpos } from '../state/expos';
@@ -7,7 +8,6 @@ import { useExpoDrawers } from '../state/drawer';
 import { dateRange, compact } from '../lib/format';
 import ExposGate from '../components/ExposGate';
 
-const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const BOUNDS = { India: [[7.5, 68.5], [33.5, 95.5]], UAE: [[22.6, 51.5], [26.2, 56.5]] };
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -51,8 +51,8 @@ export default function ExpoVenues() {
 
       <div className="grid venues-grid">
         <div className="near-map venues-map">
-          <MapContainer key={country} bounds={BOUNDS[country]} zoomSnap={0.25} scrollWheelZoom className={country === 'India' ? '' : 'map-muted'} style={{ height: '100%' }}>
-            {country === 'India' ? <IndiaOnlyMap /> : <TileLayer url={TILES} attribution="&copy; OpenStreetMap contributors" />}
+          <MapContainer key={country} bounds={BOUNDS[country]} zoomSnap={0.25} scrollWheelZoom style={{ height: '100%' }}>
+            {country === 'India' ? <IndiaOnlyMap /> : <EnglishMap />}
             {list.filter((v) => v.latitude != null).map((v) => {
               const n = upcomingBy[v.id]?.length || 0;
               return (

@@ -42,7 +42,7 @@ export default function IndiaMap({ vendors }) {
       zoomSnap={0.1}
       scrollWheelZoom={false}
       style={{ height: '100%', width: '100%' }}
-      attributionControl={false}
+      attributionControl
     >
       <IndiaOnlyMap />
       {bubbles.map((b) => (

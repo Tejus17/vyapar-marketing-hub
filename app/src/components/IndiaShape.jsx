@@ -1,4 +1,5 @@
-import { GeoJSON, TileLayer } from 'react-leaflet';
+import { GeoJSON } from 'react-leaflet';
+import { BaseTiles, LabelTiles } from '../lib/tiles';
 import india from '../lib/india.json';
 
 // India outline (official boundary, DataMeet india-composite, simplified).
@@ -16,13 +17,12 @@ const MASK = {
   },
 };
 
-const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-
 /** Map tiles inside India only, with the official outline. */
-export function IndiaOnlyMap({ muted = true, background = '#ffffff' }) {
+export function IndiaOnlyMap({ background = '#ffffff' }) {
   return (
     <>
-      <TileLayer url={TILES} attribution="&copy; OpenStreetMap contributors" className={muted ? 'map-muted' : ''} />
+      <BaseTiles />
+      <LabelTiles />
       <GeoJSON data={MASK} style={{ stroke: false, fillColor: background, fillOpacity: 1 }} interactive={false} />
       <GeoJSON data={india} style={{ color: '#cdbfb1', weight: 1.2, fill: false }} interactive={false} />
     </>
