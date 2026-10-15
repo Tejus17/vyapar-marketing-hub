@@ -58,6 +58,40 @@ export async function geocode(query) {
 const FUNCTIONS = (import.meta.env.VITE_SUPABASE_URL || 'https://kpwjhooqygwypdhgwtli.supabase.co') + '/functions/v1';
 const PUBLISHABLE = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_J0r2bcrRVW8d8iduj-21GA_xVzAw5F-';
 
+const queryFromUrl = (url) => {
+  try {
+    const u = new URL(url);
+    return u.searchParams.get('q') || u.searchParams.get('query') || null;
+  } catch {
+    return null;
+  }
+};
+const shopName = (words) => words.split(',')[0].trim();
+
+/**
+ * Locate a free-text Indian address: try it whole, then the pincode, then the last parts
+ * (area, city, state) — business names alone rarely geocode.
+ */
+export async function geocodeAddress(words) {
+  const tries = [words];
+  const pin = words.match(/\b[1-9]\d{5}\b/)?.[0];
+  const parts = words.split(',').map((x) => x.trim()).filter(Boolean);
+  if (parts.length > 2) tries.push(parts.slice(1).join(', '));
+  if (parts.length > 3) tries.push(parts.slice(-3).join(', '));
+  for (const q of tries) {
+    const g = await geocode(q).catch(() => null);
+    if (g) return g;
+  }
+  if (pin) {
+    const url = new URL('https://nominatim.openstreetmap.org/search');
+    url.search = new URLSearchParams({ postalcode: pin, countrycodes: 'in', format: 'jsonv2', limit: '1' });
+    const res = await fetch(url).catch(() => null);
+    const [hit] = res?.ok ? await res.json() : [];
+    if (hit) return { lat: Number(hit.lat), lng: Number(hit.lon), label: `PIN ${pin}` };
+  }
+  return null;
+}
+
 export async function expandShortMapsLink(link) {
   const res = await fetch(`${FUNCTIONS}/resolve-maps-link?url=${encodeURIComponent(link.trim())}`, {
     headers: { apikey: PUBLISHABLE },
@@ -70,14 +104,17 @@ export async function expandShortMapsLink(link) {
 export async function resolveLocation(text) {
   const direct = parseLatLng(text);
   if (direct) return { ...direct, label: placeFromUrl(text) || 'Pinned location', precise: true };
-  if (isShortMapsLink(text)) {
-    const hit = await expandShortMapsLink(text).catch(() => null);
+  if (isShortMapsLink(text) || /google\.[a-z.]+\/maps|maps\.google\./i.test(text)) {
+    const hit = isShortMapsLink(text) ? await expandShortMapsLink(text).catch(() => null) : { url: text, query: null, name: placeFromUrl(text) };
     if (hit?.lat != null) return { lat: hit.lat, lng: hit.lng, label: hit.name || 'Shop from Google Maps link', precise: true };
-    if (hit?.name) {
-      const g = await geocode(hit.name);
-      if (g) return { ...g, label: hit.name, precise: false };
+    // No coordinates in the link: locate it from the address/name it carries.
+    const words = hit?.query || hit?.name || queryFromUrl(hit?.url);
+    if (words) {
+      const g = await geocodeAddress(words);
+      if (g) return { ...g, label: `${shopName(words)} (approx. — from the address in the link)`, precise: false };
     }
-    throw new Error('Couldn’t read that Google Maps link right now. Try again in a moment, or type the shop’s area and city.');
+    if (!hit) throw new Error('Couldn’t reach Google just now — please try the link again in a few seconds.');
+    throw new Error('This link has no location or address in it. Open it in Google Maps, tap Share → Copy link again, or type the shop’s area and city.');
   }
   const hit = await geocode(text);
   if (!hit) throw new Error('Couldn’t find that place. Add the area and city, e.g. “Lajpat Nagar, Delhi”.');

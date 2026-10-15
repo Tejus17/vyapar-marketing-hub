@@ -23,8 +23,18 @@ function coordsFrom(url: string) {
   return null;
 }
 function placeName(url: string) {
-  const m = decodeURIComponent(url).match(/\/maps\/place\/([^/@?]+)/);
+  const m = decodeURIComponent(url).match(/\/maps\/(?:place|search)\/([^/@?]+)/);
   return m ? m[1].replace(/\+/g, ' ').trim() : null;
+}
+// Links shared from search results often carry the shop name + full address in ?q= instead of coordinates.
+function queryText(url: string) {
+  try {
+    const u = new URL(url);
+    const q = u.searchParams.get('q') || u.searchParams.get('query') || u.searchParams.get('destination');
+    return q && !/^-?\d+\.\d+,\s*-?\d+\.\d+$/.test(q) ? q.replace(/\+/g, ' ').trim() : null;
+  } catch {
+    return null;
+  }
 }
 
 Deno.serve(async (req) => {
@@ -45,7 +55,10 @@ Deno.serve(async (req) => {
 
   // Follow up to 6 redirects, staying on Google domains.
   for (let hop = 0; hop < 6; hop++) {
-    const res = await fetch(current.href, { redirect: 'manual', headers: { 'User-Agent': 'Mozilla/5.0 (VyaparMarketingHub)' } });
+    const res = await fetch(current.href, {
+      redirect: 'manual',
+      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36', 'Accept-Language': 'en-IN,en;q=0.9' },
+    });
     const loc = res.headers.get('location');
     if (!loc || res.status < 300 || res.status >= 400) break;
     const next = new URL(loc, current);
@@ -57,5 +70,5 @@ Deno.serve(async (req) => {
   }
 
   const coords = coordsFrom(current.href);
-  return json({ url: current.href, name: placeName(current.href), ...(coords || {}) });
+  return json({ url: current.href, name: placeName(current.href), query: queryText(current.href), ...(coords || {}) });
 });
