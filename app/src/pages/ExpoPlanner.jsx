@@ -8,7 +8,8 @@ import { FootfallPill } from '../components/EventRow';
 import ExposGate from '../components/ExposGate';
 
 const COLS = [
-  { key: 'shortlisted', title: 'Shortlisted', hint: 'Worth a look' },
+  { key: 'considering', title: 'Considering', hint: 'Being evaluated' },
+  { key: 'selected', title: 'Selected', hint: 'We want a stall here' },
   { key: 'going', title: 'Going', hint: 'Booked or confirmed' },
   { key: 'went', title: 'Went', hint: 'Add how it went' },
 ];
@@ -38,17 +39,17 @@ export default function ExpoPlanner() {
       <div className="page-head">
         <div>
           <h1 className="h2">Our expo plan</h1>
-          <p className="sub">Events the team has shortlisted, booked or attended. Set the status from any event.</p>
+          <p className="sub">Events the team is considering, has selected, booked or attended. Change the status from the events list or any event.</p>
         </div>
         <label className="toggle">
-          <input type="checkbox" checked={showPast} onChange={(e) => setShowPast(e.target.checked)} /> Show past shortlisted / going
+          <input type="checkbox" checked={showPast} onChange={(e) => setShowPast(e.target.checked)} /> Show past ones too
         </label>
       </div>
       {planned.length === 0 ? (
         <div className="card empty">
           <div className="empty-icon"><KanbanSquare /></div>
           <h3>Nothing planned yet</h3>
-          <p>Open any event and mark it Shortlisted, Going or Went — it lands here for the whole team.</p>
+          <p>Set an event to Considering, Selected, Going or Went from the events list — it lands here for the whole team.</p>
           <Link to="/" className="btn btn-primary" style={{ marginTop: 12 }}>Browse events</Link>
         </div>
       ) : (

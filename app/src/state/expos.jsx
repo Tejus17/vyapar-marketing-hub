@@ -144,11 +144,12 @@ export function useExpos() {
 }
 
 export const EVENT_STATUSES = [
-  { key: 'new', label: 'New', tone: '' },
-  { key: 'shortlisted', label: 'Shortlisted', tone: 'tag-amber' },
-  { key: 'going', label: 'Going', tone: 'tag-red' },
-  { key: 'went', label: 'Went', tone: 'tag-green' },
-  { key: 'not_for_us', label: 'Not for us', tone: 'tag-muted' },
+  { key: 'new', label: 'New', tone: '', hint: 'Found by the collector — nobody has reviewed it yet' },
+  { key: 'considering', label: 'Considering', tone: 'tag-amber', hint: 'Someone is evaluating it' },
+  { key: 'selected', label: 'Selected', tone: 'tag-blue', hint: 'We want to take a stall' },
+  { key: 'going', label: 'Going', tone: 'tag-red', hint: 'Booked / confirmed' },
+  { key: 'went', label: 'Went', tone: 'tag-green', hint: 'Attended — add notes and real footfall' },
+  { key: 'not_for_us', label: 'Not for us', tone: 'tag-muted', hint: 'Rejected' },
 ];
 export const statusMeta = (k) => EVENT_STATUSES.find((s) => s.key === k) || EVENT_STATUSES[0];
 

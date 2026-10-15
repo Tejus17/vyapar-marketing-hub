@@ -1,6 +1,6 @@
 import { MapPin, Users, Building2 } from 'lucide-react';
 import { dateRange, dayBadge, daysUntil, compact } from '../lib/format';
-import { statusMeta, bestFootfall } from '../state/expos';
+import { statusMeta, bestFootfall, EVENT_STATUSES, useExpos } from '../state/expos';
 import { useExpoDrawers } from '../state/drawer';
 
 export function FootfallPill({ e, long = false }) {
@@ -20,6 +20,26 @@ export function StatusTag({ status }) {
   return <span className={`tag ${m.tone}`}>{m.label}</span>;
 }
 
+/** Status dropdown usable right in the list — changes are saved for the whole team. */
+export function StatusPicker({ e }) {
+  const { setEventStatus } = useExpos();
+  return (
+    <select
+      className={`status-pick s-${e.team_status || 'new'}`}
+      value={e.team_status || 'new'}
+      onClick={(x) => x.stopPropagation()}
+      onKeyDown={(x) => x.stopPropagation()}
+      onChange={(x) => setEventStatus(e, x.target.value)}
+      title={statusMeta(e.team_status).hint}
+      aria-label={`Status for ${e.name}`}
+    >
+      {EVENT_STATUSES.map((st) => (
+        <option key={st.key} value={st.key}>{st.label}</option>
+      ))}
+    </select>
+  );
+}
+
 export default function EventRow({ e }) {
   const { openEvent } = useExpoDrawers();
   const b = dayBadge(e.start_date);
@@ -35,7 +55,6 @@ export default function EventRow({ e }) {
       <div style={{ minWidth: 0 }}>
         <div className="vname">
           <span>{e.name}</span>
-          <StatusTag status={e.team_status} />
           {e.country === 'UAE' && <span className="tag">UAE</span>}
         </div>
         <div className="vplace">
@@ -52,6 +71,7 @@ export default function EventRow({ e }) {
         </div>
       </div>
       <div className="erow-side">
+        <StatusPicker e={e} />
         <FootfallPill e={e} />
         {e.audience && <span className="hint">{e.audience}</span>}
         {e.exhibitors ? (

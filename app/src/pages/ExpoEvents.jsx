@@ -10,13 +10,15 @@ import RadarMap from '../components/RadarMap';
 
 const FOOTFALL_STEPS = [0, 5000, 7000, 10000, 25000, 50000, 100000];
 const WHEN = {
-  upcoming: 'Upcoming',
-  next30: 'Next 30 days',
-  next90: 'Next 3 months',
-  next180: 'Next 6 months',
+  upcoming: 'All upcoming',
+  range: 'Custom dates…',
   past: 'Past 12 months',
   all: 'All dates',
 };
+// One-click windows starting today (they fill the custom From / To dates).
+const QUICK = [
+  ['10 days', 10], ['1 month', 30], ['3 months', 91], ['4 months', 122], ['6 months', 183],
+];
 const UAE_DEFAULT_CITY = 'Dubai';
 const today = () => new Date().toISOString().slice(0, 10);
 const plusDays = (n) => new Date(Date.now() + n * 864e5).toISOString().slice(0, 10);
@@ -41,6 +43,8 @@ export default function ExpoEvents() {
   const f = {
     country: params.get('country') || 'all',
     when: params.get('when') || 'upcoming',
+    from: params.get('from') || '',
+    to: params.get('to') || '',
     city: params.get('city') || '',
     venue: params.get('venue') || '',
     niches: params.getAll('niche'),
@@ -62,6 +66,7 @@ export default function ExpoEvents() {
   const set = (key, value) => {
     if (key === 'country') return update({ country: value === 'all' ? '' : value, city: value === 'UAE' ? UAE_DEFAULT_CITY : '', venue: '' });
     if (key === 'city') return update({ city: value, venue: '' });
+    if (key === 'when') return update({ when: value, ...(value === 'range' ? { from: params.get('from') || today(), to: params.get('to') || plusDays(91) } : { from: '', to: '' }) });
     return update({ [key]: value });
   };
   useEffect(() => setLimit(80), [params, q]);
@@ -77,14 +82,17 @@ export default function ExpoEvents() {
       if (!e.start_date) return f.when === 'all';
       switch (f.when) {
         case 'upcoming': return end >= t || (!e.end_date && e.start_date.slice(0, 7) >= t.slice(0, 7));
-        case 'next30': return end >= t && e.start_date <= plusDays(30);
-        case 'next90': return end >= t && e.start_date <= plusDays(90);
-        case 'next180': return end >= t && e.start_date <= plusDays(180);
+        case 'range': {
+          // overlaps the chosen period (month-only events count if their month overlaps)
+          const s0 = e.start_date;
+          const e0 = e.end_date || `${e.start_date.slice(0, 7)}-28`;
+          return (!f.from || e0 >= f.from) && (!f.to || s0 <= f.to);
+        }
         case 'past': return end < t && e.start_date >= plusDays(-365);
         default: return true;
       }
     });
-  }, [inCountry, f.when]);
+  }, [inCountry, f.when, f.from, f.to]);
 
   // Everything except niches, so the niche list can show live counts.
   const beforeNiche = useMemo(() => {
@@ -93,7 +101,7 @@ export default function ExpoEvents() {
       if (f.city && e.city !== f.city) return false;
       if (f.venue && e.venue_name !== f.venue) return false;
       if (f.audience && !(e.audience || '').includes(f.audience)) return false;
-      if (f.status && e.team_status !== f.status) return false;
+      if (f.status ? e.team_status !== f.status : e.team_status === 'not_for_us') return false;
       const ff = bestFootfall(e);
       if (ff == null ? !f.unknown : ff < f.minFoot) return false;
       if (needle) {
@@ -120,7 +128,9 @@ export default function ExpoEvents() {
   const stats = useMemo(() => ({
     total: inWindow.length,
     big: inWindow.filter((e) => (bestFootfall(e) ?? 0) >= 10000).length,
-    shortlisted: inWindow.filter((e) => e.team_status === 'shortlisted').length,
+    considering: inWindow.filter((e) => e.team_status === 'considering').length,
+    selected: inWindow.filter((e) => e.team_status === 'selected').length,
+    hidden: inWindow.filter((e) => e.team_status === 'not_for_us').length,
     going: inWindow.filter((e) => e.team_status === 'going').length,
   }), [inWindow]);
 
@@ -195,6 +205,29 @@ export default function ExpoEvents() {
             <select className="select" value={f.when} onChange={(e) => set('when', e.target.value === 'upcoming' ? '' : e.target.value)}>
               {Object.entries(WHEN).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
             </select>
+            <div className="quick-ranges" role="group" aria-label="Quick date ranges from today">
+              {QUICK.map(([label, days]) => {
+                const to = plusDays(days);
+                const on = f.when === 'range' && f.from === today() && f.to === to;
+                return (
+                  <button key={label} className={on ? 'on' : ''} onClick={() => update({ when: 'range', from: today(), to })}>
+                    Next {label}
+                  </button>
+                );
+              })}
+            </div>
+            {f.when === 'range' && (
+              <div className="date-range">
+                <label className="field">
+                  <span className="label">From</span>
+                  <input className="input" type="date" value={f.from} onChange={(e) => update({ from: e.target.value })} />
+                </label>
+                <label className="field">
+                  <span className="label">To</span>
+                  <input className="input" type="date" value={f.to} min={f.from || undefined} onChange={(e) => update({ to: e.target.value })} />
+                </label>
+              </div>
+            )}
           </div>
 
           <div className="side-group">
@@ -280,8 +313,12 @@ export default function ExpoEvents() {
             <span><b>{filtered.length.toLocaleString('en-IN')}</b> events{f.minFoot ? ` · ${compact(f.minFoot)}+ visitors${f.unknown ? ' or unknown' : ''}` : ''}</span>
             <span>·</span>
             <button onClick={() => set('ff', '10000')}><b>{stats.big}</b> with 10k+ claimed</button>
-            <button className={f.status === 'shortlisted' ? 'on' : ''} onClick={() => set('status', f.status === 'shortlisted' ? '' : 'shortlisted')}><b>{stats.shortlisted}</b> shortlisted</button>
+            <button className={f.status === 'considering' ? 'on' : ''} onClick={() => set('status', f.status === 'considering' ? '' : 'considering')}><b>{stats.considering}</b> considering</button>
+            <button className={f.status === 'selected' ? 'on' : ''} onClick={() => set('status', f.status === 'selected' ? '' : 'selected')}><b>{stats.selected}</b> selected</button>
             <button className={f.status === 'going' ? 'on' : ''} onClick={() => set('status', f.status === 'going' ? '' : 'going')}><b>{stats.going}</b> going</button>
+            {stats.hidden > 0 && !f.status && (
+              <button onClick={() => set('status', 'not_for_us')} title="Events marked Not for us are hidden">· {stats.hidden} hidden as not for us</button>
+            )}
           </div>
 
           {filtered.length === 0 ? (

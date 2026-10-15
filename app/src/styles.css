@@ -657,3 +657,26 @@ body { font-size: 13.5px; }
   .ev-aside { display: none; }
 }
 @media (max-width: 860px) { .ev-layout { display: block; } }
+.tag-blue { background: #e8f0fd; color: #1d4fa8; }
+/* inline status picker on event rows */
+.status-pick {
+  appearance: none; height: 24px; border-radius: 999px; border: 1px solid var(--line-2); padding: 0 22px 0 10px;
+  font: 500 11.5px 'Poppins', system-ui, sans-serif; cursor: pointer; background-color: #fff; color: var(--ink-2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%236b6f78' stroke-width='1.6'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+.status-pick:hover { border-color: var(--ink-2); }
+.status-pick.s-considering { background-color: var(--amber-tint); color: var(--amber-ink); border-color: #f1d48f; }
+.status-pick.s-selected { background-color: #e8f0fd; color: #1d4fa8; border-color: #b9cff5; }
+.status-pick.s-going { background-color: var(--red-tint); color: var(--red-dark); border-color: var(--red-line); }
+.status-pick.s-went { background-color: var(--green-tint); color: var(--green); border-color: #b6e2c9; }
+.status-pick.s-not_for_us { background-color: #f1f0ee; color: var(--soft); }
+.date-range { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.date-range .input { padding: 0 8px; font-size: 12.5px; }
+.quick-ranges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.quick-ranges button { border: 1px solid var(--line-2); background: #fff; border-radius: 999px; padding: 3px 9px; font-size: 11.5px; color: var(--ink-2); cursor: pointer; }
+.quick-ranges button:hover { border-color: var(--ink-2); }
+.quick-ranges button.on { background: var(--red); border-color: var(--red); color: #fff; }
+.kanban { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .kanban { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .kanban { grid-template-columns: 1fr; } }
