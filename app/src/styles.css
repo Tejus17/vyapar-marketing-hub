@@ -681,3 +681,6 @@ body { font-size: 13.5px; }
 @media (max-width: 1100px) { .kanban { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 860px) { .kanban { grid-template-columns: 1fr; } }
 .leaflet-control-attribution { font-size: 9px; }
+/* blue street-map look */
+.radar, .radar .leaflet-container, .hero-map .leaflet-container, .near-map .leaflet-container { background: #e6eef7; }
+.map-muted .leaflet-tile-pane, .leaflet-layer.map-muted, .near-map .leaflet-tile-pane { filter: none; }

@@ -71,7 +71,7 @@ export default function RadarMap({ events, country, city, onPickVenue, activeVen
       <div className="radar">
         <MapContainer bounds={bounds} zoomSnap={0.25} scrollWheelZoom style={{ height: "100%" }}>
           {country === 'India' ? (
-            <IndiaOnlyMap background="#fbf8f5" />
+            <IndiaOnlyMap />
           ) : (
             <EnglishMap />
           )}

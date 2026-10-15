@@ -1,5 +1,5 @@
 import { GeoJSON } from 'react-leaflet';
-import { BaseTiles, LabelTiles } from '../lib/tiles';
+import { BaseTiles, OUTSIDE } from '../lib/tiles';
 import india from '../lib/india.json';
 
 // India outline (official boundary, DataMeet india-composite, simplified).
@@ -18,13 +18,12 @@ const MASK = {
 };
 
 /** Map tiles inside India only, with the official outline. */
-export function IndiaOnlyMap({ background = '#ffffff' }) {
+export function IndiaOnlyMap({ background = OUTSIDE }) {
   return (
     <>
       <BaseTiles />
-      <LabelTiles />
       <GeoJSON data={MASK} style={{ stroke: false, fillColor: background, fillOpacity: 1 }} interactive={false} />
-      <GeoJSON data={india} style={{ color: '#cdbfb1', weight: 1.2, fill: false }} interactive={false} />
+      <GeoJSON data={india} style={{ color: '#7f9bbd', weight: 1.4, fill: false }} interactive={false} />
     </>
   );
 }
