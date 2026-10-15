@@ -48,8 +48,8 @@ export default function ExpoVenues() {
         </div>
       </div>
 
-      <div className="grid" style={{ gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 1fr)', alignItems: 'start', gap: 24 }}>
-        <div className="near-map" style={{ height: 520, position: 'sticky', top: 132 }}>
+      <div className="grid venues-grid">
+        <div className="near-map venues-map">
           <MapContainer key={country} bounds={BOUNDS[country]} scrollWheelZoom className="map-muted" style={{ height: '100%' }}>
             <TileLayer url={TILES} attribution="&copy; OpenStreetMap contributors" />
             {list.filter((v) => v.latitude != null).map((v) => {

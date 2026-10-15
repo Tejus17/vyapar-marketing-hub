@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, CalendarX2, Download } from 'lucide-react';
+import { Search, CalendarX2, Download, SlidersHorizontal, X } from 'lucide-react';
 import { useExpos, EXPO_NICHES, EVENT_STATUSES, bestFootfall } from '../state/expos';
 import { useStore } from '../state/store';
 import { monthLabel, compact } from '../lib/format';
@@ -36,6 +36,7 @@ export default function ExpoEvents() {
   const [params, setParams] = useSearchParams();
   const [q, setQ] = useState(params.get('q') || '');
   const [limit, setLimit] = useState(80);
+  const [sheet, setSheet] = useState(false); // phone: filters open as a bottom sheet
 
   const f = {
     country: params.get('country') || 'all',
@@ -135,6 +136,7 @@ export default function ExpoEvents() {
     return g;
   }, [shown, f.sort]);
 
+  const activeCount = [f.city, f.venue, f.audience, f.status, params.has('ff'), params.has('unk'), params.has('when')].filter(Boolean).length + f.niches.length;
   const filtersOn = f.city || f.venue || f.niches.length || f.audience || f.status || params.has('ff') || params.has('unk') || params.has('when');
   const clearFilters = () => {
     setQ('');
@@ -170,16 +172,24 @@ export default function ExpoEvents() {
           <Search />
           <input className="input" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search events, organisers, industries" />
         </div>
-        <select className="select" style={{ width: 150 }} value={f.sort} onChange={(e) => set('sort', e.target.value === 'date' ? '' : e.target.value)} aria-label="Sort">
-          <option value="date">Sort: by date</option>
-          <option value="footfall">Sort: biggest footfall</option>
+        <button className="btn btn-sm only-phone" onClick={() => setSheet(true)}>
+          <SlidersHorizontal /> Filters{activeCount ? ` · ${activeCount}` : ''}
+        </button>
+        <select className="select ev-sort" value={f.sort} onChange={(e) => set('sort', e.target.value === 'date' ? '' : e.target.value)} aria-label="Sort">
+          <option value="date">By date</option>
+          <option value="footfall">Biggest footfall</option>
         </select>
-        <button className="btn btn-sm" onClick={exportCsv} disabled={!filtered.length}><Download /> CSV</button>
+        <button className="btn btn-sm hide-phone" onClick={exportCsv} disabled={!filtered.length}><Download /> CSV</button>
       </div>
 
       <div className="ev-layout">
         {/* Left: all filters */}
-        <aside className="ev-side" aria-label="Filters">
+        {sheet && <div className="sheet-scrim only-phone" onClick={() => setSheet(false)} />}
+        <aside className={`ev-side ${sheet ? 'open' : ''}`} aria-label="Filters">
+          <div className="sheet-head only-phone">
+            <b>Filters</b>
+            <button className="icon-btn" onClick={() => setSheet(false)} aria-label="Close filters"><X /></button>
+          </div>
           <div className="side-group">
             <p className="side-title">When</p>
             <select className="select" value={f.when} onChange={(e) => set('when', e.target.value === 'upcoming' ? '' : e.target.value)}>
@@ -257,6 +267,11 @@ export default function ExpoEvents() {
               <button className="btn btn-sm" style={{ width: '100%' }} onClick={clearFilters}>Reset filters</button>
             </div>
           )}
+          <div className="sheet-foot only-phone">
+            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setSheet(false)}>
+              Show {filtered.length.toLocaleString('en-IN')} events
+            </button>
+          </div>
         </aside>
 
         {/* Middle: results */}

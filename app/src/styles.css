@@ -556,3 +556,82 @@ body { font-size: 13.5px; }
   .ev-layout { grid-template-columns: 280px minmax(0, 1fr) 280px; }
   .radar { height: 270px; }
 }
+
+/* ══ Phone & tablet (kept last so it wins over the desktop rules above) ══ */
+.only-phone { display: none !important; }
+.ev-sort { width: 160px; }
+@media (max-width: 1180px) {
+  .ev-layout { grid-template-columns: 240px minmax(0, 1fr); }
+  .ev-aside { display: none; }
+}
+@media (max-width: 860px) {
+  .only-phone { display: inline-flex !important; }
+  .hide-phone { display: none !important; }
+  /* header: logo + "+" on row 1, nav on row 2 */
+  .header-inner { flex-wrap: wrap; gap: 6px 10px; padding: 8px 14px; }
+  .brand-divider, .brand-product { display: none; }
+  .mainnav { order: 3; flex-basis: 100%; justify-content: space-between; gap: 0; }
+  .mainnav .navgroup, .mainnav .navsep { display: none; }
+  .mainnav a, .menu-trigger { padding: 7px 9px; font-size: 13px; }
+  .menu-pop { left: auto; right: 0; }
+  .header-cta { margin-left: auto; }
+  .page { padding: 14px 14px 48px; }
+  .filterbar { top: 0; position: static; }
+  /* events */
+  .ev-top { gap: 8px; }
+  .ev-top .title { flex-basis: 100%; }
+  .ev-top .grow { order: 5; flex-basis: 100%; min-width: 0; }
+  .ev-sort { width: auto; flex: 1; min-width: 0; }
+  .ev-layout { display: block; }
+  .ev-side { display: none; }
+  .ev-side.open {
+    display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 1200; max-height: 82vh; overflow-y: auto;
+    background: #fff; border-radius: 18px 18px 0 0; padding: 0 16px 0; box-shadow: 0 -12px 40px -10px rgba(0,0,0,.3);
+    border: 0; animation: sheetup .2s ease-out;
+  }
+  .sheet-scrim { position: fixed; inset: 0; background: rgba(20, 16, 14, .38); z-index: 1150; }
+  .sheet-head { position: sticky; top: 0; background: #fff; display: flex !important; justify-content: space-between; align-items: center; padding: 14px 0 10px; border-bottom: 1px solid var(--line); margin-bottom: 4px; z-index: 1; }
+  .sheet-foot { position: sticky; bottom: 0; background: #fff; display: block !important; padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); }
+  .ev-summary { font-size: 12px; gap: 4px 10px; }
+  .erow { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; padding: 11px 12px; }
+  .erow-side { grid-column: 2; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 4px 8px; text-align: left; }
+  .datebox { width: 42px; height: 42px; }
+  .datebox b { font-size: 15px; }
+  .month-head { margin: 14px 2px 6px; }
+  /* vendors */
+  .vrow { grid-template-columns: 34px minmax(0, 1fr) 30px; gap: 10px; padding: 10px 12px; }
+  .vrow .col-services, .vrow .col-phone, .vrow .col-price { display: none; }
+  .filter-row { grid-template-columns: 1fr 1fr; }
+  .filter-row > :first-child { grid-column: span 2; }
+  .hero { grid-template-columns: 1fr; gap: 20px; }
+  .hero-map { height: 320px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 22px; padding: 22px 0; }
+  .near-layout { grid-template-columns: 1fr; }
+  .near-panel { position: static; }
+  .near-map { height: 300px; }
+  .grid[style*="minmax(280px"] { grid-template-columns: 1fr !important; }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-grid .span-2 { grid-column: auto; }
+  .kanban { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+  .drawer-head, .drawer-body { padding-left: 16px; padding-right: 16px; }
+  .near-card { grid-template-columns: 34px minmax(0, 1fr); }
+  .near-card .dist { grid-column: 2; text-align: left; }
+}
+@media (max-width: 480px) {
+  .header-cta { padding: 0; width: 32px; justify-content: center; font-size: 0; gap: 0; }
+  .header-cta svg { width: 16px; height: 16px; }
+}
+@keyframes sheetup { from { transform: translateY(30px); opacity: .6; } }
+@media (max-width: 480px) {
+  .mainnav a svg, .menu-trigger > svg:first-child { display: none; }
+  .mainnav a, .menu-trigger { padding: 7px 8px; }
+  .erow { align-items: start; }
+  .ev-top .seg button { padding: 5px 10px; }
+}
+.venues-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start; gap: 24px; }
+.venues-map { height: 560px; position: sticky; top: 70px; }
+@media (max-width: 860px) {
+  .venues-grid { grid-template-columns: 1fr; gap: 14px; }
+  .venues-map { height: 280px; position: static; }
+}
