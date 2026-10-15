@@ -25,7 +25,7 @@ export function parseLatLng(text) {
   return null;
 }
 
-export const isShortMapsLink = (text) => /maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/kgs/i.test(text || '');
+export const isShortMapsLink = (text) => /maps\.app\.goo\.gl|goo\.gl\/maps|g\.co\/kgs|share\.google/i.test(text || '');
 
 /** "…/maps/place/POOJA+ELECTRONIC/@…" → "POOJA ELECTRONIC" */
 export const placeFromUrl = (text) => {
@@ -106,14 +106,24 @@ export async function resolveLocation(text) {
   if (direct) return { ...direct, label: placeFromUrl(text) || 'Pinned location', precise: true };
   if (isShortMapsLink(text) || /google\.[a-z.]+\/maps|maps\.google\./i.test(text)) {
     const hit = isShortMapsLink(text) ? await expandShortMapsLink(text).catch(() => null) : { url: text, query: null, name: placeFromUrl(text) };
-    if (hit?.lat != null) return { lat: hit.lat, lng: hit.lng, label: hit.name || 'Shop from Google Maps link', precise: true };
-    // No coordinates in the link: locate it from the address/name it carries.
+    if (hit?.lat != null) {
+      const named = hit.name && !/°|^-?\d+\.\d+,/.test(hit.name); // Google names bare pins by their coordinates
+      return { lat: hit.lat, lng: hit.lng, label: named ? hit.name : 'Shop from your Google Maps link', precise: true };
+    }
+    // No coordinates in the link: locate it from the address/place it carries.
     const words = hit?.query || hit?.name || queryFromUrl(hit?.url);
     if (words) {
-      const g = await geocodeAddress(words);
-      if (g) return { ...g, label: `${shopName(words)} (approx. — from the address in the link)`, precise: false };
+      const name = shopName(words.split('||')[0]);
+      // "…Car Painting Shop In Anjar" → Anjar
+      const place = words.match(/\b(?:in|at|near)\s+([A-Z][\w .'-]{2,40})\s*$/i)?.[1];
+      const g = (place && (await geocode(place).catch(() => null))) || (/,/.test(words) ? await geocodeAddress(words) : null);
+      if (g) return { ...g, label: `${name} (approx. — ${place ? `in ${place}` : 'from the address in the link'})`, precise: false };
+      // Only a shop name — ask where it is instead of failing.
+      const err = new Error(`Where is ${name}?`);
+      err.code = 'NEED_PLACE';
+      err.shopName = name;
+      throw err;
     }
-    if (!hit) throw new Error('Couldn’t reach Google just now — please try the link again in a few seconds.');
     throw new Error('This link has no location or address in it. Open it in Google Maps, tap Share → Copy link again, or type the shop’s area and city.');
   }
   const hit = await geocode(text);

@@ -3,8 +3,8 @@
 // the place's coordinates and name, so the dashboard can find vendors near a shop.
 // Only Google Maps links are followed — it can't be used to fetch anything else.
 
-const SHORT_HOSTS = ['maps.app.goo.gl', 'goo.gl', 'g.co'];
-const GOOGLE_HOST = /(^|\.)google\.[a-z.]+$|(^|\.)goo\.gl$|(^|\.)g\.co$|(^|\.)app\.goo\.gl$/i;
+const SHORT_HOSTS = ['maps.app.goo.gl', 'goo.gl', 'g.co', 'share.google'];
+const GOOGLE_HOST = /(^|\.)google\.[a-z.]+$|(^|\.)goo\.gl$|(^|\.)g\.co$|(^|\.)app\.goo\.gl$|^share\.google$/i;
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -53,22 +53,34 @@ Deno.serve(async (req) => {
     return json({ error: 'Only Google Maps links are supported' }, 400);
   }
 
-  // Follow up to 6 redirects, staying on Google domains.
+  // Follow up to 6 redirects, staying on Google domains. Stop as soon as we reach a Google
+  // Search link (share.google): the shop name is in the link itself, and opening the search
+  // page would only trip Google's rate limit.
   for (let hop = 0; hop < 6; hop++) {
+    if (current.pathname === '/search') break;
     const res = await fetch(current.href, {
       redirect: 'manual',
-      headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36', 'Accept-Language': 'en-IN,en;q=0.9' },
+      // Keep this plain: with a full desktop-browser UA Google answers with a JavaScript page instead of a redirect.
+      headers: { 'User-Agent': 'Mozilla/5.0 (VyaparMarketingHub)', 'Accept-Language': 'en-IN,en;q=0.9' },
     });
     const loc = res.headers.get('location');
     if (!loc || res.status < 300 || res.status >= 400) break;
     const next = new URL(loc, current);
     // Google's cookie-consent page wraps the real link in ?continue=
-    const cont = next.hostname.startsWith('consent.') ? next.searchParams.get('continue') : null;
+    const cont = next.hostname.startsWith('consent.') || next.pathname.startsWith('/sorry') ? next.searchParams.get('continue') : null;
     const target = cont ? new URL(cont) : next;
     if (!GOOGLE_HOST.test(target.hostname)) return json({ error: 'Link leaves Google Maps' }, 400);
     current = target;
   }
 
   const coords = coordsFrom(current.href);
-  return json({ url: current.href, name: placeName(current.href), query: queryText(current.href), ...(coords || {}) });
+  // share.google links end on a Google Search page (shop name + place ID, no coordinates).
+  const isSearch = /\/search$/.test(current.pathname);
+  return json({
+    url: current.href,
+    kind: isSearch ? 'search' : 'maps',
+    name: placeName(current.href) || (isSearch ? queryText(current.href) : null),
+    query: queryText(current.href),
+    ...(coords || {}),
+  });
 });

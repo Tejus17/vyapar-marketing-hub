@@ -7,7 +7,7 @@ import { MapPinned, LocateFixed, Search, Route, AlertCircle, Navigation, Star, B
 import { useStore, readLocal, writeLocal } from '../state/store';
 import { useOpenVendor } from '../state/drawer';
 import { SERVICES, TRAVEL_MODES } from '../lib/constants';
-import { resolveLocation, haversineKm, roadDistances, estimateRoadKm, directionsUrl } from '../lib/geo';
+import { resolveLocation, haversineKm, roadDistances, estimateRoadKm, directionsUrl, geocode } from '../lib/geo';
 import { km, minutes, rupees, lowestSqftRate } from '../lib/format';
 import { ServiceTags } from '../components/VendorRow';
 
@@ -57,6 +57,8 @@ export default function NearShop() {
   const [roundTrip, setRoundTrip] = useState(() => readLocal('vh_round', true));
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
+  const [needPlace, setNeedPlace] = useState(null); // link had only a shop name: ask where it is
+  const [placeText, setPlaceText] = useState('');
   const [roads, setRoads] = useState(null); // { [vendorId]: {km, min} } or 'unavailable'
 
   useEffect(() => writeLocal('vh_mode', mode), [mode]);
@@ -119,6 +121,7 @@ export default function NearShop() {
     if (!query.trim()) return;
     setBusy(true);
     setErr('');
+    setNeedPlace(null);
     try {
       const loc = await resolveLocation(query);
       setOrigin(loc);
@@ -127,7 +130,31 @@ export default function NearShop() {
       next.set('q', query.trim());
       setParams(next, { replace: true });
     } catch (ex) {
-      setErr(ex.message);
+      if (ex.code === 'NEED_PLACE') {
+        setNeedPlace({ name: ex.shopName });
+        setOrigin(null); // don't keep showing the previous shop's results
+      }
+      else setErr(ex.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const locateNamedShop = async (e) => {
+    e.preventDefault();
+    if (!placeText.trim()) return;
+    setBusy(true);
+    try {
+      const g = await geocode(placeText.trim());
+      if (!g) return setErr(`Couldn’t find “${placeText.trim()}”. Try the area and city, e.g. “Navrangpura, Ahmedabad”.`);
+      const loc = { lat: g.lat, lng: g.lng, label: `${needPlace.name} (approx. — ${placeText.trim()})` };
+      setOrigin(loc);
+      setNeedPlace(null);
+      setErr('');
+      const next = new URLSearchParams(params);
+      next.set('at', `${loc.lat.toFixed(5)},${loc.lng.toFixed(5)}`);
+      next.set('q', query.trim());
+      setParams(next, { replace: true });
     } finally {
       setBusy(false);
     }
@@ -196,6 +223,16 @@ export default function NearShop() {
             </div>
           </form>
 
+          {needPlace && (
+            <form onSubmit={locateNamedShop} className="alert alert-cream" style={{ marginTop: 12, display: 'block' }}>
+              <b style={{ display: 'block', marginBottom: 4 }}>Where is {needPlace.name}?</b>
+              <span className="hint">This link only has the shop’s name. Type its area and city:</span>
+              <div className="row" style={{ marginTop: 8 }}>
+                <input className="input" autoFocus value={placeText} onChange={(e) => setPlaceText(e.target.value)} placeholder="e.g. Navrangpura, Ahmedabad" />
+                <button className="btn btn-primary btn-sm" disabled={busy}>Find</button>
+              </div>
+            </form>
+          )}
           {err && (
             <div className="alert alert-red" style={{ marginTop: 12 }}>
               <AlertCircle /> <span>{err}</span>
