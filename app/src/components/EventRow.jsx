@@ -28,7 +28,7 @@ export default function EventRow({ e }) {
   const tbc = !e.end_date; // only the month is known
   return (
     <div className="erow" role="button" tabIndex={0} onClick={() => openEvent(e.id)} onKeyDown={(k) => k.key === 'Enter' && openEvent(e.id)}>
-      <div className={`datebox ${d < 0 ? 'past' : ''}`}>
+      <div className={`datebox ${e.end_date && daysUntil(e.end_date) < 0 ? 'past' : ''}`}>
         <b>{tbc ? b.mon : b.day}</b>
         <span>{tbc ? 'TBC' : b.mon}</span>
       </div>

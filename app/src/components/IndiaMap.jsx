@@ -1,11 +1,9 @@
 import { useMemo } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
+import { MapContainer, CircleMarker, Tooltip } from 'react-leaflet';
+import IndiaShape, { INDIA_BOUNDS } from './IndiaShape';
 import { useNavigate } from 'react-router-dom';
 import { CITIES } from '../lib/constants';
 
-// Free OpenStreetMap tiles; desaturated in CSS (.map-muted) so the red city bubbles stand out.
-const TILES = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const ATTR = '&copy; OpenStreetMap contributors';
 
 /** One bubble per city, sized by how many vendors we have there. */
 export default function IndiaMap({ vendors }) {
@@ -31,7 +29,7 @@ export default function IndiaMap({ vendors }) {
         const lng = known ? known.lng : c.pts ? c.lng / c.pts : null;
         return { ...c, lat, lng };
       })
-      .filter((c) => c.lat != null)
+      .filter((c) => c.lat != null && CITIES[c.city]?.country !== 'UAE')
       .sort((a, b) => b.n - a.n);
   }, [vendors]);
 
@@ -39,16 +37,17 @@ export default function IndiaMap({ vendors }) {
 
   return (
     <MapContainer
-      bounds={[[7.5, 68.5], [33.5, 95.5]]}
-      boundsOptions={{ padding: [12, 12] }}
+      bounds={INDIA_BOUNDS}
+      boundsOptions={{ padding: [10, 10] }}
       zoomSnap={0.1}
-      minZoom={4}
       scrollWheelZoom={false}
       style={{ height: '100%', width: '100%' }}
-      className="map-muted"
-      attributionControl
+      attributionControl={false}
+      dragging={false}
+      doubleClickZoom={false}
+      zoomControl={false}
     >
-      <TileLayer url={TILES} attribution={ATTR} />
+      <IndiaShape />
       {bubbles.map((b) => (
         <CircleMarker
           key={b.city}

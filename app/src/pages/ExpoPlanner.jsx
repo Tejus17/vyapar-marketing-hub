@@ -49,7 +49,7 @@ export default function ExpoPlanner() {
           <div className="empty-icon"><KanbanSquare /></div>
           <h3>Nothing planned yet</h3>
           <p>Open any event and mark it Shortlisted, Going or Went — it lands here for the whole team.</p>
-          <Link to="/expos" className="btn btn-primary" style={{ marginTop: 12 }}>Browse events</Link>
+          <Link to="/" className="btn btn-primary" style={{ marginTop: 12 }}>Browse events</Link>
         </div>
       ) : (
         <div className="kanban">

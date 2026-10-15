@@ -74,7 +74,7 @@ export default function VenueDrawer({ id, onClose }) {
               ))
             )}
             {upcoming.length > 12 && (
-              <Link to={`/expos?country=${v.country}&venue=${encodeURIComponent(upcoming[0].venue_name || '')}&ff=0`} className="btn btn-sm btn-ghost" style={{ marginTop: 8 }}>
+              <Link to={`/?country=${v.country}&venue=${encodeURIComponent(upcoming[0].venue_name || '')}&ff=0`} className="btn btn-sm btn-ghost" style={{ marginTop: 8 }}>
                 <CalendarDays /> See all {upcoming.length} events
               </Link>
             )}

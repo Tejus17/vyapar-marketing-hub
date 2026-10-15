@@ -67,7 +67,7 @@ export default function ExpoAdd() {
     setSaving(false);
     if (saved) {
       notify('Event added');
-      navigate('/expos', { state: { openEvent: saved.id } });
+      navigate('/', { state: { openEvent: saved.id } });
     }
   };
 

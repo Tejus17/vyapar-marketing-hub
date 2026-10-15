@@ -71,8 +71,8 @@ async function get(url, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, vali
   return null;
 }
 
-const decode = (s = '') =>
-  s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+const decode = (raw = '') =>
+  String(raw ?? '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>')
     .replace(/&nbsp;/g, ' ').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n));
 const text = (s = '') => decode(s.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, ' ')).replace(/[ \t]+/g, ' ').replace(/\s*\n\s*/g, '\n').trim();
 const titleCase = (s) => (s === s.toUpperCase() ? s.toLowerCase().replace(/\b([a-z])/g, (m) => m.toUpperCase()).replace(/\b(Of|And|For|The|In|On|At|&)\b/g, (m) => m.toLowerCase()).replace(/^./, (m) => m.toUpperCase()) : s);
@@ -301,6 +301,111 @@ const STATE = {
 };
 const CITY_ALIAS = { Bangalore: 'Bengaluru', Gurgaon: 'Gurugram', Cochin: 'Kochi', Mysore: 'Mysuru', 'New Delhi': 'Delhi', Trivandrum: 'Thiruvananthapuram', Baroda: 'Vadodara' };
 
+// ── 6. TradeIndia (India) ───────────────────────────────────────────────────
+const TI = 'https://www.tradeindia.com';
+const nextData = (html) => {
+  const m = html && html.match(/<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/);
+  try { return m ? JSON.parse(m[1]) : null; } catch { return null; }
+};
+function* walkObj(o) {
+  if (Array.isArray(o)) for (const v of o) yield* walkObj(v);
+  else if (o && typeof o === 'object') { yield o; for (const v of Object.values(o)) yield* walkObj(v); }
+}
+const tiListValid = (h) => /"fair_name"/.test(h || '');
+async function tiPage(pathOrUrl) {
+  const url = pathOrUrl.startsWith('http') ? pathOrUrl : TI + pathOrUrl;
+  const html = await get(url, { maxAgeDays: 0.5, minGapMs: 2500, validate: tiListValid });
+  const d = nextData(html);
+  if (!d) return { fairs: [], data: null };
+  const fairs = [];
+  for (const o of walkObj(d)) if (o.fair_id && o.fair_name && (o.fair_date || o.date)) fairs.push(o);
+  return { fairs, data: d };
+}
+const totalOf = (d) => Number(JSON.stringify(d || {}).match(/"total_count":\s*(\d+)/)?.[1] || 0);
+
+async function collectTradeIndia() {
+  const found = new Map();
+  const add = (list) => list.forEach((f) => found.set(String(f.fair_id), { ...found.get(String(f.fair_id)), ...f }));
+  const home = await tiPage('/tradeshows/country/india/');
+  if (!home.data) { console.log('  TradeIndia unreachable today — skipped'); return []; }
+  add(home.fairs);
+  const listing = [...walkObj(home.data)].find((o) => o.filter_by_months && o.popular_cities) || {};
+  const months = (listing.filter_by_months?.calendar_months || []).map((m) => m.url.replace(/\/$/, '').split('/').slice(-2).join('/'));
+  const total = totalOf(home.data);
+  for (const m of months) add((await tiPage(`/tradeshows/country/india/${m}`)).fairs);
+  for (const c of listing.popular_cities || []) {
+    const base = c.city_url.replace(/\/$/, '');
+    const page = await tiPage(base);
+    add(page.fairs);
+    if (totalOf(page.data) > 30) for (const m of months) add((await tiPage(`${base}/${m}`)).fairs);
+  }
+  // Categories catch events in smaller cities.
+  const cats = new Set();
+  for (const o of walkObj(home.data)) if (o.category_url && /\/tradeshows\/[a-z0-9-]+\/?$/.test(o.category_url)) cats.add(o.category_url);
+  for (const u of cats) add((await tiPage(u)).fairs);
+  const india = [...found.values()].filter((f) => !f.country || /india/i.test(f.country) || /india/i.test(f.country_name || ''));
+  console.log(`  TradeIndia: ${india.length} of ${total} listed`);
+
+  const out = [];
+  let k = 0;
+  for (const f of india) {
+    const url = String(f.fair_url || `${TI}/tradeshows/${f.fair_id}/`).replace('://wwww.', '://www.');
+    const html = await get(url, { maxAgeDays: DETAIL_MAX_AGE_DAYS, minGapMs: 2500, validate: (h) => /profile_details_res/.test(h) });
+    const p = [...walkObj(nextData(html) || {})].find((o) => 'expected_visitor_count' in o) || {};
+    if (p.fair_country && !/india/i.test(p.fair_country)) continue; // category pages include shows abroad
+    const desc = text(p.fair_description || f.fair_desc || '').replace(/\s+/g, ' ').trim();
+    const site = [f.website, p.fair_website].find((w) => w && !/tradeindia\.com/.test(w)) || null;
+    const ev = {
+      ti_id: String(f.fair_id),
+      name: decode(String(p.fair_name || f.fair_name)).replace(/\s+(19|20)\d\d\s*$/, '').trim(),
+      description: desc ? desc.slice(0, 600) : null,
+      country: 'India',
+      city: CITY_ALIAS[p.fair_city || f.city] || p.fair_city || f.city || null,
+      state: p.fair_state || null,
+      venue_name: decode(p.fair_venue || f.venue || '') || null,
+      start_date: p.s_date || null,
+      end_date: p.e_date || p.s_date || null,
+      industries: [...new Set([...(f.fair_categories || []).map((c) => c.category_name), ...(f.keyword || []).map((x) => x.trim())].filter(Boolean))],
+      website: site,
+      organisers: p.organizer_name ? [{ name: decode(p.organizer_name), phone: null, website: null }] : [],
+      ti_url: url,
+    };
+    if (!ev.start_date) {
+      const m = String(f.fair_date || '').match(/(\d{1,2}) (\w{3}),? (\d{4})/);
+      if (m) ev.start_date = new Date(`${m[2]} ${m[1]}, ${m[3]} 12:00 UTC`).toISOString().slice(0, 10);
+      ev.end_date = ev.start_date;
+    }
+    if (!ev.start_date) continue;
+    const vis = Number(String(p.expected_visitor_count || '').replace(/[^\d]/g, ''));
+    const exh = Number(String(p.expected_exhibitor_count || '').replace(/[^\d]/g, ''));
+    if (vis >= 300) Object.assign(ev, { footfall: vis, footfall_text: `Expected visitors: ${p.expected_visitor_count} (organiser, on TradeIndia)`, footfall_source: 'TradeIndia (organiser estimate)', footfall_source_url: url });
+    else {
+      const ff = footfallFrom(desc);
+      if (ff?.footfall) Object.assign(ev, { footfall: ff.footfall, footfall_text: ff.footfall_text, footfall_source: 'TradeIndia listing (organiser description)', footfall_source_url: url });
+      if (ff?.exhibitors) ev.exhibitors = ff.exhibitors;
+    }
+    if (exh >= 10) ev.exhibitors = exh;
+    ev.niches = nichesFor(ev);
+    out.push(ev);
+    if (++k % 100 === 0) console.log(`  TradeIndia details ${k}/${india.length}`);
+  }
+  return out;
+}
+
+// Same show listed on both sites? Same city, start within 3 days, similar name.
+const nameTokens = (n) => new Set(String(n).toLowerCase().replace(/\b(19|20)\d\d\b/g, ' ').replace(/[^a-z0-9]+/g, ' ').split(' ').filter((w) => w.length > 1 && !['the', 'and', 'of', 'expo', 'exhibition', 'india', 'international', 'show', 'fair', 'trade'].includes(w)));
+function sameEvent(a, b) {
+  if (a.country !== b.country) return false;
+  if (norm(a.city) !== norm(b.city)) return false;
+  if (!a.start_date || !b.start_date) return false;
+  const monthOnly = !a.end_date || !b.end_date; // EventsEye sometimes knows only the month
+  if (monthOnly ? a.start_date.slice(0, 7) !== b.start_date.slice(0, 7) : Math.abs(Date.parse(a.start_date) - Date.parse(b.start_date)) > 3 * 864e5) return false;
+  const x = nameTokens(a.name), y = nameTokens(b.name);
+  if (!x.size || !y.size) return norm(a.name) === norm(b.name);
+  const inter = [...x].filter((w) => y.has(w)).length;
+  return inter / Math.min(x.size, y.size) >= 0.6;
+}
+
 // ── run ─────────────────────────────────────────────────────────────────────
 // Last run's results: keep a footfall figure if the event's website is down today.
 const previous = Object.fromEntries(
@@ -327,6 +432,27 @@ for (const row of listed) {
   if (++i % 100 === 0) console.log(`  details ${i}/${listed.length}`);
 }
 
+// Pass 1b — TradeIndia: merge into EventsEye events where it's the same show, add the rest.
+let tiAdded = 0, tiMerged = 0;
+for (const t of await collectTradeIndia()) {
+  const match = events.find((e) => sameEvent(e, t));
+  if (match) {
+    tiMerged += 1;
+    for (const k of ['description', 'website', 'state', 'venue_name']) if (!match[k] && t[k]) match[k] = t[k];
+    if (!match.organisers?.length && t.organisers.length) match.organisers = t.organisers;
+    if (!match.footfall && t.footfall) for (const k of ['footfall', 'footfall_text', 'footfall_source', 'footfall_source_url']) match[k] = t[k];
+    if (!match.exhibitors && t.exhibitors) match.exhibitors = t.exhibitors;
+    match.industries = [...new Set([...(match.industries || []), ...t.industries])];
+    match.niches = nichesFor(match);
+    if (!match.end_date && t.end_date) Object.assign(match, { start_date: t.start_date, end_date: t.end_date }); // exact dates beat "month only"
+    match.also_listed = t.ti_url;
+  } else {
+    tiAdded += 1;
+    events.push({ ...t, dedupe_key: `ti:${t.ti_id}`, detail_url: t.ti_url, source_name: 'TradeIndia' });
+  }
+}
+console.log(`  TradeIndia: ${tiMerged} matched EventsEye events, ${tiAdded} new`);
+
 // Pass 2 — footfall claims from each event's own website, 8 sites at a time.
 async function pool(items, size, fn) {
   let next = 0;
@@ -334,7 +460,7 @@ async function pool(items, size, fn) {
     while (next < items.length) await fn(items[next++]);
   }));
 }
-await pool(events.filter((e) => e.website), 8, async (e) => {
+await pool(events.filter((e) => e.website && !e.footfall), 8, async (e) => {
   const ff = footfallFrom(await get(e.website, { maxAgeDays: SITE_MAX_AGE_DAYS, minGapMs: 0, timeout: 12000 }));
   if (ff?.footfall) Object.assign(e, ff, { footfall_source: 'Event website (organiser claim)', footfall_source_url: e.website });
   else if (ff?.exhibitors) e.exhibitors = ff.exhibitors;
@@ -424,7 +550,7 @@ const eventRows = events.map((e) => ({
   organiser: (e.organisers || []).map((o) => o.name).join(' · ') || null,
   organiser_phone: (e.organisers || []).map((o) => o.phone).filter(Boolean).join(' · ') || null,
   organiser_website: (e.organisers || []).find((o) => o.website)?.website || null,
-  website: e.website, source_name: 'EventsEye', source_url: e.detail_url, last_seen_at: now, dedupe_key: e.dedupe_key,
+  website: e.website, source_name: e.source_name || (e.also_listed ? 'EventsEye + TradeIndia' : 'EventsEye'), source_url: e.detail_url, last_seen_at: now, dedupe_key: e.dedupe_key,
 }));
 await upsert('hub_events', eventRows, 'dedupe_key');
 console.log(`Uploaded ${venueRows.length} venues and ${eventRows.length} events (team status / notes untouched).`);

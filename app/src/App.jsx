@@ -47,7 +47,8 @@ export default function App() {
           </div>
         ) : (
           <Routes>
-            <Route path="/" element={<Overview />} />
+            <Route path="/" element={<ExpoEvents />} />
+            <Route path="/vendors/overview" element={<Overview />} />
             <Route path="/near" element={<NearShop />} />
             <Route path="/vendors" element={<Vendors />} />
             <Route path="/starred" element={<Starred />} />
