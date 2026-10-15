@@ -8,3 +8,4 @@ legacy/backend/.env
 data/geocode-cache.json
 data/events/cache/
 legacy/
+data/partner-shops/
