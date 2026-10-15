@@ -59,7 +59,7 @@ export default function EventRow({ e }) {
             <Building2 size={12} style={{ verticalAlign: -1 }} /> {compact(e.exhibitors)} exhibitors
           </span>
         ) : null}
-        {soon && <span className="hint" style={{ color: 'var(--red)', fontWeight: 600 }}>{d === 0 ? 'Today' : `in ${d} days`}</span>}
+        {soon && <span className="hint" style={{ color: 'var(--red)', fontWeight: 600 }}>{d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : `in ${d} days`}</span>}
       </div>
     </div>
   );

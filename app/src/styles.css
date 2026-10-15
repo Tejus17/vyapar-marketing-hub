@@ -545,3 +545,14 @@ body { font-size: 13.5px; }
 
 .hero-map .leaflet-container { background: #fff; }
 .hero-map { box-shadow: none; }
+
+/* ══ v3: use the full screen width ══ */
+.page { max-width: 1760px; padding-left: clamp(16px, 2.2vw, 40px); padding-right: clamp(16px, 2.2vw, 40px); }
+.header-inner { max-width: 1760px; padding-left: clamp(16px, 2.2vw, 40px); padding-right: clamp(16px, 2.2vw, 40px); }
+.ev-layout { grid-template-columns: 260px minmax(0, 1fr) 240px; gap: 28px; }
+.ev-top .grow { max-width: none; }
+.radar { width: 100%; height: 230px; }
+@media (min-width: 1600px) {
+  .ev-layout { grid-template-columns: 280px minmax(0, 1fr) 280px; }
+  .radar { height: 270px; }
+}
