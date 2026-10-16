@@ -3,6 +3,7 @@
 # Setup: repo → Settings → Secrets and variables → Actions → add
 #   SUPABASE_URL          https://kpwjhooqygwypdhgwtli.supabase.co
 #   SUPABASE_SECRET_KEY   (the sb_secret_… key — never commit it)
+#   SLACK_WEBHOOK_URL     (optional) Slack Incoming Webhook for the daily digest
 name: Refresh expos
 
 on:
@@ -11,6 +12,11 @@ on:
     # GitHub sometimes delays or skips scheduled runs at busy times; a second, cheap run (pages are cached) makes sure the day is covered.
     - cron: '17 3 * * *' # 08:47 IST backup
   workflow_dispatch: {} # "Run workflow" button for an on-demand refresh
+
+# The 8:47 backup waits for a still-running morning run instead of reading every site twice.
+concurrency:
+  group: refresh-expos
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -35,6 +41,12 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      # Morning digest to the team's Slack channel (skipped until the SLACK_WEBHOOK_URL secret is added).
+      - run: node scripts/slack-digest.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/cache/save@v4
         if: always()
         with:

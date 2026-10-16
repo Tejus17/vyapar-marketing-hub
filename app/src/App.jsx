@@ -24,10 +24,11 @@ export default function App() {
   const [venueId, setVenueId] = useState(null);
 
   // Close panels on page change, unless the navigation asks to open one.
+  // ?event=<id> (used by the Slack digest links) opens that event on arrival.
   const location = useLocation();
   useEffect(() => {
     setVendorId(location.state?.openVendor ?? null);
-    setEventId(location.state?.openEvent ?? null);
+    setEventId(location.state?.openEvent ?? new URLSearchParams(location.search).get('event'));
     setVenueId(null);
   }, [location.pathname, location.state]);
 
