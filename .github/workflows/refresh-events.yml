@@ -7,7 +7,7 @@ name: Refresh expos
 
 on:
   schedule:
-    - cron: '30 1 * * *' # 07:00 IST every day
+    - cron: '23 1 * * *' # 06:53 IST every day (an off-peak minute; GitHub drops more runs at :00 and :30)
     # GitHub sometimes delays or skips scheduled runs at busy times; a second, cheap run (pages are cached) makes sure the day is covered.
     - cron: '17 3 * * *' # 08:47 IST backup
   workflow_dispatch: {} # "Run workflow" button for an on-demand refresh
