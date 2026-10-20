@@ -48,7 +48,8 @@ const fixUrl = (u) => {
   const full = /^https?:\/\//i.test(t) ? t : `https://${t.replace(/^\/+/, '')}`;
   try { return new URL(full).href; } catch { return null; }
 };
-async function get(rawUrl, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, validate = null } = {}) {
+// failDays: after a page fails (blocked / incomplete), don't ask for it again for this many days.
+async function get(rawUrl, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, validate = null, attempts = 3, failDays = 0 } = {}) {
   const url = fixUrl(rawUrl);
   if (!url) return null;
   const file = path.join(CACHE, crypto.createHash('md5').update(url).digest('hex') + '.html');
@@ -56,11 +57,13 @@ async function get(rawUrl, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, v
     const cached = fs.readFileSync(file, 'utf8');
     if (!validate || validate(cached)) return cached;
   }
+  const failFile = `${file}.failed`;
+  if (failDays && fs.existsSync(failFile) && Date.now() - fs.statSync(failFile).mtimeMs < failDays * 864e5) return null;
   const host = new URL(url).host;
   const wait = minGapMs - (Date.now() - (lastHit[host] || 0));
   if (wait > 0) await sleep(wait);
   lastHit[host] = Date.now();
-  for (let attempt = 0; attempt < 3; attempt += 1) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
     try {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), timeout);
@@ -73,10 +76,11 @@ async function get(rawUrl, { maxAgeDays = 0, minGapMs = 1200, timeout = 25000, v
       fs.writeFileSync(file, html);
       return html;
     } catch (e) {
-      if (attempt === 2) return null;
+      if (attempt === attempts - 1) break;
       await sleep(4000 * (attempt + 1));
     }
   }
+  if (failDays) fs.writeFileSync(failFile, '');
   return null;
 }
 
@@ -365,9 +369,15 @@ async function collectTradeIndia() {
 
   const out = [];
   let k = 0;
+  // TradeIndia often blocks cloud servers on event pages. One try per page, a blocked page waits
+  // 3 days before the next try, and after 25 blocks in a row we stop asking for today — the listing
+  // data and last run's details (footfall etc.) still cover those events.
+  let blockedInARow = 0;
   for (const f of india) {
     const url = String(f.fair_url || `${TI}/tradeshows/${f.fair_id}/`).replace('://wwww.', '://www.');
-    const html = await get(url, { maxAgeDays: DETAIL_MAX_AGE_DAYS, minGapMs: 2500, validate: (h) => /profile_details_res/.test(h) });
+    const html = blockedInARow >= 25 ? null : await get(url, { maxAgeDays: DETAIL_MAX_AGE_DAYS, minGapMs: 2500, attempts: 1, failDays: 3, validate: (h) => /profile_details_res/.test(h) });
+    blockedInARow = html ? 0 : blockedInARow + 1;
+    if (blockedInARow === 25) console.log('  TradeIndia is blocking event pages today — using listing data for the rest');
     const p = [...walkObj(nextData(html) || {})].find((o) => 'expected_visitor_count' in o) || {};
     if (p.fair_country && !/india/i.test(p.fair_country)) continue; // category pages include shows abroad
     const desc = text(p.fair_description || f.fair_desc || '').replace(/\s+/g, ' ').trim();
@@ -679,6 +689,9 @@ for (const e of events) {
   const again = !e.footfall && !e.organiser_wide_claim && prev?.footfall_text ? footfallFrom(prev.footfall_text) : null;
   if (again?.footfall) Object.assign(e, { footfall: again.footfall, footfall_text: prev.footfall_text, footfall_source: prev.footfall_source, footfall_source_url: prev.footfall_source_url });
   if (!e.exhibitors && prev?.exhibitors) e.exhibitors = prev.exhibitors;
+  // a page that was blocked today: keep what we read last time instead of blanking it
+  for (const k of ['description', 'website', 'venue_name', 'venue_address', 'audience']) if (!e[k] && prev?.[k]) e[k] = prev[k];
+  if (!e.organisers?.length && prev?.organisers?.length) e.organisers = prev.organisers;
   const v = matchVenue(e);
   if (v) {
     e.venue_key = v.dedupe_key || `${norm(v.name)}|${norm(v.city)}`;
