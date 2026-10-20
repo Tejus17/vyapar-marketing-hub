@@ -258,8 +258,16 @@ const NICHES = [
   ['Logistics & transport', /\b(logistics?|warehous\w*|supply chain|cold chain|freight|shipping|cargo)\b/i],
   ['Travel & tourism', /\b(travel|tourism|tourist)\b/i],
 ];
+// newroyal.ae's 15 broad groups ("Beauty, Bridal, Jewellery, Clothing…") would tick several niches
+// at once, so niches are read from the event itself and the finer industries only.
+const BROAD_GROUPS = new Set([
+  'Agriculture, Veterinary, Equestrian and Horticulture', 'Beauty, Bridal, Jewellery, Clothing and Accessories', 'Business & Finance',
+  'Construction, Interiors and Real Estate', 'Consumer Goods', 'Education, Training and Careers', 'Energy and Environment',
+  'Food, Hotel and Catering', 'Healthcare and Medical', 'Industrial and Manufacturing', 'Leisure, Sport and Travel',
+  'Printing, Packaging and Media', 'Safety and Defence', 'Technology', 'Transport and Logistics',
+]);
 const nichesFor = (e) => {
-  const hay = `${e.name} ${e.description || ''} ${(e.industries || []).join(' ')}`;
+  const hay = `${e.name} ${e.description || ''} ${(e.industries || []).filter((x) => !BROAD_GROUPS.has(x)).join(' ')}`;
   return NICHES.filter(([, re]) => re.test(hay)).map(([n]) => n);
 };
 
@@ -462,6 +470,81 @@ async function collectDWTC() {
   return out;
 }
 
+// ── 8. newroyal.ae (a Dubai stand builder's exhibition calendar) ─────────────
+// Its public WordPress feed lists each show with dates, venue, visitor and exhibitor counts and
+// one of 15 industry groups. (robots.txt only blocks its /wp-json/wpgb/ filter API, which we don't use.)
+const NR = 'https://newroyal.ae/wp-json/wp/v2';
+const NR_VENUES = {
+  dwtc: ['Dubai World Trade Centre', 'Dubai', 'Dubai'],
+  'dubai-exhibition-centre': ['Dubai Exhibition Centre', 'Dubai', 'Dubai'],
+  adnec: ['ADNEC Centre Abu Dhabi', 'Abu Dhabi', 'Abu Dhabi'],
+};
+const nrNumber = (v) => {
+  const m = String(v || '').replace(/,/g, '').match(/(\d+(?:\.\d+)?)\s*(k|m|million)?/i);
+  if (!m) return null;
+  const n = Number(m[1]) * ({ k: 1e3, m: 1e6, million: 1e6 }[(m[2] || '').toLowerCase()] || 1);
+  return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
+};
+const nrDate = (v) => (/^\d{8}$/.test(v || '') ? `${v.slice(0, 4)}-${v.slice(4, 6)}-${v.slice(6, 8)}` : null);
+async function collectNewRoyal() {
+  const json = async (url) => {
+    const raw = await get(url, { maxAgeDays: 0.5, validate: (h) => /^\s*\[/.test(h) });
+    try { return raw ? JSON.parse(raw) : null; } catch { return null; }
+  };
+  const terms = async (tax) => Object.fromEntries(((await json(`${NR}/${tax}?per_page=100&_fields=id,name,slug`)) || []).map((t) => [t.id, t]));
+  const [industry, venue, month] = [await terms('industry'), await terms('venue'), await terms('exhibition-month')];
+  const items = [];
+  for (let page = 1; page <= 10; page += 1) {
+    const batch = await json(`${NR}/exhibition?per_page=100&page=${page}&_fields=id,link,title,content,industry,venue,exhibition-month,acf`);
+    if (!batch) break;
+    items.push(...batch);
+    if (batch.length < 100) break;
+  }
+  if (!items.length) { console.log('  newroyal.ae unreachable today — skipped'); return []; }
+  const since = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
+  const out = [];
+  for (const it of items) {
+    const a = it.acf || {};
+    let start = nrDate(a.start_date);
+    let end = nrDate(a.end_date) || start;
+    if (!start) {
+      // no exact dates yet: use the listed month (shown as "dates TBC")
+      const m = (it['exhibition-month'] || []).map((id) => month[id]?.slug).find((x) => /^\d{4}-\d{2}$/.test(x || ''));
+      if (!m) continue;
+      start = `${m}-01`;
+      end = null;
+    }
+    if ((end || start) < since) continue;
+    const [venueName, city, state] = NR_VENUES[(it.venue || []).map((id) => venue[id]?.slug).find(Boolean)] || [null, 'Dubai', 'Dubai'];
+    const name = decode(it.title?.rendered || '').trim();
+    const desc = text(it.content?.rendered || '').replace(/\s+/g, ' ').trim();
+    const visitors = nrNumber(a.visitor_count);
+    out.push({
+      name,
+      description: desc ? desc.slice(0, 600) : null,
+      country: 'UAE', city, state, venue_name: venueName,
+      venue_address: a.hall ? `${venueName || city}, ${a.hall}` : null,
+      start_date: start, end_date: end,
+      industries: (it.industry || []).map((id) => decode(industry[id]?.name || '')).filter(Boolean),
+      audience: null,
+      website: fixUrl(a.website_link),
+      organisers: a.organizer_name ? [{ name: decode(a.organizer_name), phone: null, website: null }] : [],
+      ...(visitors && {
+        footfall: visitors,
+        // name the event so identical "10,000+" figures aren't mistaken for one organiser-wide claim
+        footfall_text: `${name}: ${a.visitor_count} visitors (newroyal.ae listing)`,
+        footfall_source: 'newroyal.ae listing',
+        footfall_source_url: it.link,
+      }),
+      exhibitors: nrNumber(a.exhibitor_count),
+      nr_url: it.link,
+      nr_id: it.id,
+    });
+  }
+  console.log(`  newroyal.ae: ${out.length} of ${items.length} listed`);
+  return out;
+}
+
 // Dubai World Central (DWC, Dubai South) hosts the Dubai Airshow and MEBAA — directories
 // often file them under DWTC, so put them at the right venue.
 const DWC_RE = /\b(dubai airshow|mebaa)\b/i;
@@ -532,6 +615,33 @@ for (const t of await collectDWTC()) {
   }
 }
 console.log(`  DWTC: ${dwMerged} matched existing events, ${dwAdded} new`);
+
+// Pass 1d — newroyal.ae: visitor counts and industry groups for UAE shows.
+let nrAdded = 0, nrMerged = 0;
+// Also treat as the same show: same city and start day, sharing a word that's rare across all
+// events (newroyal.ae uses short names — "GETEX Spring" is "Gulf Education & Training Exhibition - Getex Dubai").
+const wordCount = {};
+for (const e of events) for (const w of nameTokens(e.name)) wordCount[w] = (wordCount[w] || 0) + 1;
+const sameDayRareWord = (e, t) =>
+  e.country === t.country && norm(e.city) === norm(t.city) && e.start_date === t.start_date &&
+  [...nameTokens(t.name)].some((w) => w.length >= 4 && (wordCount[w] || 0) <= 3 && nameTokens(e.name).has(w));
+for (const t of await collectNewRoyal()) {
+  const match = events.find((e) => sameEvent(e, t)) || events.find((e) => sameDayRareWord(e, t));
+  if (match) {
+    nrMerged += 1;
+    for (const k of ['description', 'website', 'venue_name', 'venue_address']) if (!match[k] && t[k]) match[k] = t[k];
+    if (!match.organisers?.length && t.organisers.length) match.organisers = t.organisers;
+    if (!match.footfall && t.footfall) for (const k of ['footfall', 'footfall_text', 'footfall_source', 'footfall_source_url']) match[k] = t[k];
+    if (!match.exhibitors && t.exhibitors) match.exhibitors = t.exhibitors;
+    if (!match.end_date && t.end_date) Object.assign(match, { start_date: t.start_date, end_date: t.end_date });
+    match.industries = [...new Set([...(match.industries || []), ...t.industries])];
+    match.niches = nichesFor(match);
+  } else {
+    nrAdded += 1;
+    events.push({ ...t, niches: nichesFor(t), dedupe_key: `nr:${t.nr_id}`, detail_url: t.nr_url, source_name: 'newroyal.ae' });
+  }
+}
+console.log(`  newroyal.ae: ${nrMerged} matched existing events, ${nrAdded} new`);
 
 for (const e of events) {
   if (e.country === 'UAE' && DWC_RE.test(e.name)) e.venue_name = 'Dubai Airshow Site';

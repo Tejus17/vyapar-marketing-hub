@@ -684,3 +684,9 @@ body { font-size: 13.5px; }
 /* blue street-map look */
 .radar, .radar .leaflet-container, .hero-map .leaflet-container, .near-map .leaflet-container { background: #e6eef7; }
 .map-muted .leaflet-tile-pane, .leaflet-layer.map-muted, .near-map .leaflet-tile-pane { filter: none; }
+/* Industry chips (left filters) */
+.ind-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.ind-chips button { border: 1px solid var(--line-2); background: #fff; border-radius: 999px; padding: 3px 9px; font-size: 11.5px; line-height: 1.35; color: var(--ink-2); cursor: pointer; text-align: left; }
+.ind-chips button:hover { border-color: var(--ink-2); }
+.ind-chips button.on { background: var(--red); border-color: var(--red); color: #fff; }
+.ind-chips .count { margin-left: 5px; font-size: 10.5px; opacity: .65; }

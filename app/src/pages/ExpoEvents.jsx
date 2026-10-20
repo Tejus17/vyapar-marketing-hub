@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, CalendarX2, Download, SlidersHorizontal, X } from 'lucide-react';
-import { useExpos, EXPO_NICHES, EVENT_STATUSES, bestFootfall } from '../state/expos';
+import { useExpos, EXPO_NICHES, EXPO_INDUSTRIES, EVENT_STATUSES, bestFootfall } from '../state/expos';
 import { useStore } from '../state/store';
 import { monthLabel, compact } from '../lib/format';
 import EventRow from '../components/EventRow';
@@ -47,6 +47,8 @@ export default function ExpoEvents() {
     to: params.get('to') || '',
     city: params.get('city') || '',
     venue: params.get('venue') || '',
+    month: params.get('month') || '',
+    industries: params.getAll('ind'),
     niches: params.getAll('niche'),
     minFoot: params.has('ff') ? Number(params.get('ff')) : 10000,
     unknown: params.get('unk') !== '0',
@@ -94,10 +96,23 @@ export default function ExpoEvents() {
     });
   }, [inCountry, f.when, f.from, f.to]);
 
-  // Everything except niches, so the niche list can show live counts.
-  const beforeNiche = useMemo(() => {
+  // Months that have events in the chosen period, for the Month dropdown.
+  const months = useMemo(() => {
+    const c = new Map();
+    for (const e of inWindow) if (e.start_date) c.set(e.start_date.slice(0, 7), (c.get(e.start_date.slice(0, 7)) || 0) + 1);
+    return [...c.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [inWindow]);
+
+  // Everything except industry and niche, so those lists can show live counts.
+  const base = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return inWindow.filter((e) => {
+      if (f.month) {
+        // events spanning two months count in both
+        const s0 = e.start_date?.slice(0, 7);
+        const e0 = (e.end_date || e.start_date)?.slice(0, 7);
+        if (!s0 || s0 > f.month || e0 < f.month) return false;
+      }
       if (f.city && e.city !== f.city) return false;
       if (f.venue && e.venue_name !== f.venue) return false;
       if (f.audience && !(e.audience || '').includes(f.audience)) return false;
@@ -110,10 +125,19 @@ export default function ExpoEvents() {
       }
       return true;
     });
-  }, [inWindow, q, f.city, f.venue, f.audience, f.status, f.minFoot, f.unknown]);
+  }, [inWindow, q, f.month, f.city, f.venue, f.audience, f.status, f.minFoot, f.unknown]);
+
+  const inIndustry = (e) => !f.industries.length || f.industries.some((i) => e.sectors?.includes(i));
+  const inNiche = (e) => !f.niches.length || f.niches.some((n) => e.niches?.includes(n));
+  const beforeNiche = useMemo(() => base.filter(inIndustry), [base, f.industries.join('|')]); // eslint-disable-line
+  const industryCount = useMemo(() => {
+    const c = {};
+    for (const e of base) if (inNiche(e)) for (const i of e.sectors || []) c[i] = (c[i] || 0) + 1;
+    return c;
+  }, [base, f.niches.join('|')]); // eslint-disable-line
 
   const filtered = useMemo(() => {
-    let out = f.niches.length ? beforeNiche.filter((e) => f.niches.some((n) => e.niches?.includes(n))) : beforeNiche;
+    let out = f.niches.length ? beforeNiche.filter(inNiche) : beforeNiche;
     if (f.sort === 'footfall') out = [...out].sort((a, b) => (bestFootfall(b) ?? -1) - (bestFootfall(a) ?? -1));
     else if (f.when === 'past') out = [...out].sort((a, b) => (b.start_date || '').localeCompare(a.start_date || ''));
     return out;
@@ -146,8 +170,8 @@ export default function ExpoEvents() {
     return g;
   }, [shown, f.sort]);
 
-  const activeCount = [f.city, f.venue, f.audience, f.status, params.has('ff'), params.has('unk'), params.has('when')].filter(Boolean).length + f.niches.length;
-  const filtersOn = f.city || f.venue || f.niches.length || f.audience || f.status || params.has('ff') || params.has('unk') || params.has('when');
+  const activeCount = [f.month, f.city, f.venue, f.audience, f.status, params.has('ff'), params.has('unk'), params.has('when')].filter(Boolean).length + f.niches.length + f.industries.length;
+  const filtersOn = activeCount > 0;
   const clearFilters = () => {
     setQ('');
     setParams(new URLSearchParams(f.country !== 'all' ? { country: f.country } : {}), { replace: true });
@@ -231,6 +255,15 @@ export default function ExpoEvents() {
           </div>
 
           <div className="side-group">
+            <p className="side-title">Month</p>
+            <select className="select" value={f.month} onChange={(e) => set('month', e.target.value)}>
+              <option value="">All months</option>
+              {f.month && !months.some(([m]) => m === f.month) && <option value={f.month}>{monthLabel(`${f.month}-01`)}</option>}
+              {months.map(([m, n]) => <option key={m} value={m}>{monthLabel(`${m}-01`)} ({n})</option>)}
+            </select>
+          </div>
+
+          <div className="side-group">
             <p className="side-title">Where</p>
             <select className="select" value={f.city} onChange={(e) => set('city', e.target.value)} style={{ marginBottom: 8 }}>
               <option value="">{f.country === 'UAE' ? 'All UAE cities' : 'All cities'}</option>
@@ -274,6 +307,24 @@ export default function ExpoEvents() {
               <option value="">Any status</option>
               {EVENT_STATUSES.map((s) => <option key={s.key} value={s.key}>{s.label}</option>)}
             </select>
+          </div>
+
+          <div className="side-group">
+            <p className="side-title">
+              Industry
+              {f.industries.length > 0 && <button onClick={() => set('ind', [])}>Clear</button>}
+            </p>
+            <div className="ind-chips" role="group" aria-label="Industry">
+              {EXPO_INDUSTRIES.map(({ name }) => {
+                const on = f.industries.includes(name);
+                return (
+                  <button key={name} className={on ? 'on' : ''} aria-pressed={on} onClick={() => set('ind', on ? f.industries.filter((x) => x !== name) : [...f.industries, name])}>
+                    {name}
+                    <span className="count">{industryCount[name] || 0}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           <div className="side-group">

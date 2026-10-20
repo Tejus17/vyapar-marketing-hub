@@ -40,7 +40,7 @@ export function ExposProvider({ children }) {
         fetchAll(EVENTS, (q) => q.eq('is_archived', false)),
         fetchAll(VENUES, (q) => q),
       ]);
-      setEvents(ev.sort((a, b) => (a.start_date || '').localeCompare(b.start_date || '')));
+      setEvents(ev.map(withIndustries).sort((a, b) => (a.start_date || '').localeCompare(b.start_date || '')));
       setVenues(vn.sort((a, b) => a.name.localeCompare(b.name)));
       setStatus('ready');
     } catch (err) {
@@ -94,7 +94,7 @@ export function ExposProvider({ children }) {
         notify(`Couldn’t add event: ${err.message}`, 'error');
         return null;
       }
-      setEvents((es) => [...es, data].sort((a, b) => (a.start_date || '').localeCompare(b.start_date || '')));
+      setEvents((es) => [...es, withIndustries(data)].sort((a, b) => (a.start_date || '').localeCompare(b.start_date || '')));
       return data;
     },
     [notify]
@@ -162,3 +162,33 @@ export const EXPO_NICHES = [
 
 /** Footfall the team should see: their own number after attending, else the organiser's claim. */
 export const bestFootfall = (e) => e.team_footfall ?? e.footfall ?? null;
+
+/**
+ * Broad industry groups (the 15 used by DWTC and newroyal.ae). Events from newroyal.ae carry them
+ * as listed there; every other event is sorted into them from its niches, listed industries and name.
+ */
+export const EXPO_INDUSTRIES = [
+  ['Agriculture, Veterinary, Equestrian and Horticulture', ['Agriculture & agri-inputs'], /\b(agri\w*|farm\w*|dairy|poultry|horticultur\w*|veterinar\w*|equestrian|seeds?|fertili[sz]\w*|livestock|fisher\w*|aqua\w*|tractors?|irrigation|organic)\b/],
+  ['Beauty, Bridal, Jewellery, Clothing and Accessories', ['Jewellery', 'Textiles, apparel & footwear', 'Beauty & personal care', 'Weddings & consumer shows'], /\b(jewel\w*|gems?|gold|diamonds?|fashion|textiles?|apparel|garments?|clothing|beauty|cosmetics?|bridal|wedding|footwear|shoes?|leather|fabrics?|yarn|saree|perfumes?|salon|spa)\b/],
+  ['Business & Finance', [], /\b(business (show|expo|summit|conclave|meet|forum)|finance|financial|fintech|banking|bank|invest\w*|insurance|crypto|blockchain|franchise|start-?ups?|msme|sme|entrepreneur\w*|wealth|trading|forex|ifx)\b/],
+  ['Construction, Interiors and Real Estate', ['Hardware & building materials', 'Real estate', 'Furniture & home décor'], /\b(construct\w*|build\w*|interiors?|architect\w*|real estate|property|cement|steel|tiles?|ceramics?|stone|marble|granite|plumbing|hvac|furniture|furnishing|home d[eé]cor|hardware|paints?|glass|doors?|windows?|kitchen|bath\w*)\b/],
+  ['Consumer Goods', ['Retail & FMCG', 'Gifts, stationery & toys'], /\b(consumer|retail|fmcg|gifts?|toys?|stationery|home ?ware|appliances?|lifestyle|handicrafts?|houseware|shopping)\b/],
+  ['Education, Training and Careers', ['Education & careers'], /\b(educat\w*|careers?|universit\w*|schools?|training|edu\w*|learning|students?|study abroad)\b/],
+  ['Energy and Environment', [], /\b(energy|solar|power|renewable|environment\w*|water|oil|gas|petro\w*|electric vehicles?|ev|battery|batteries|recycl\w*|waste|sustainab\w*|climate|green)\b/],
+  ['Food, Hotel and Catering', ['Food, beverage & HoReCa'], /\b(food|beverages?|drinks?|hotels?|horeca|hospitality|bakery|coffee|tea|restaurants?|catering|halal|spices?|confectionery|snacks?|rice|grains?)\b/],
+  ['Healthcare and Medical', ['Pharma & healthcare'], /\b(health\w*|medical|medicine|pharma\w*|hospitals?|dental|labs?|laborator\w*|diagnostic\w*|ayush|ayurved\w*|wellness|surgical|nursing)\b/],
+  ['Industrial and Manufacturing', ['Manufacturing, machinery & packaging'], /\b(industr\w*|manufactur\w*|machine\w*|machinery|engineering|plastics?|chemicals?|automation|tools?|metals?|welding|pumps?|valves?|rubber|foundry|cnc|robotics?)\b/],
+  ['Leisure, Sport and Travel', ['Travel & tourism'], /\b(leisure|sports?|fitness|travel|tourism|holiday|adventure|entertainment|amusement|gaming|games|boats?|yachts?|art|music|film)\b/],
+  ['Printing, Packaging and Media', [], /\b(print\w*|packag\w*|pack|media|signs?|signage|labels?|paper|publish\w*|advertis\w*|broadcast\w*|graphics?)\b/],
+  ['Safety and Defence', [], /\b(safety|security|defen[cs]e|fire|police|surveillance|cctv|military|homeland|cyber ?security)\b/],
+  ['Technology', ['Mobile, IT & tech', 'Computer dealer associations', 'Electricals & electronics'], /\b(tech\w*|it|software|ai|digital|electronics?|electricals?|telecom\w*|mobiles?|computers?|gitex|data|cloud|semiconductors?|iot|smart)\b/],
+  ['Transport and Logistics', ['Auto & auto parts', 'Logistics & transport'], /\b(logistic\w*|transport\w*|auto\w*|vehicles?|aviation|aircraft|airports?|aerospace|marine|maritime|ships?|shipping|rail\w*|trucks?|motors?|tyres?|cargo|supply chain|warehous\w*)\b/],
+].map(([name, niches, re]) => ({ name, niches, re }));
+
+function withIndustries(e) {
+  const listed = (e.industries || []).filter((x) => EXPO_INDUSTRIES.some((i) => i.name === x));
+  if (listed.length) return { ...e, sectors: listed };
+  const text = `${e.name} ${(e.industries || []).join(' ')}`.toLowerCase();
+  const sectors = EXPO_INDUSTRIES.filter((i) => i.niches.some((n) => e.niches?.includes(n)) || i.re.test(text)).map((i) => i.name);
+  return { ...e, sectors };
+}
