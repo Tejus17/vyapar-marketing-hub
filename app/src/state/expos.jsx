@@ -154,7 +154,7 @@ export const EVENT_STATUSES = [
 export const statusMeta = (k) => EVENT_STATUSES.find((s) => s.key === k) || EVENT_STATUSES[0];
 
 export const EXPO_NICHES = [
-  'Retail & FMCG', 'Pharma & healthcare', 'Hardware & building materials', 'Electricals & electronics', 'Mobile, IT & tech', 'Computer dealer associations',
+  'Retail & FMCG', 'Pharma & healthcare', 'Hardware & building materials', 'Electricals & electronics', 'Partner acquisition', 'Mobile, IT & tech', 'Computer dealer associations',
   'Textiles, apparel & footwear', 'Jewellery', 'Auto & auto parts', 'Food, beverage & HoReCa', 'Furniture & home décor',
   'Gifts, stationery & toys', 'Agriculture & agri-inputs', 'Manufacturing, machinery & packaging', 'MSME, franchise & business',
   'Beauty & personal care', 'Weddings & consumer shows', 'Real estate', 'Education & careers', 'Logistics & transport', 'Travel & tourism',

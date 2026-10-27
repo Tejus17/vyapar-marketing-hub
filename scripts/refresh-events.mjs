@@ -703,6 +703,11 @@ for (const e of events) {
     if (g) Object.assign(e, { latitude: g.lat, longitude: g.lng });
   }
 }
+// Niches added by hand-researched lists (e.g. "Partner acquisition", see import-assoc-events.mjs).
+// Kept outside data/events, which the GitHub run restores from its cache.
+const TAGS_FILE = path.join(ROOT, 'data', 'manual-tags.json');
+const manualTags = fs.existsSync(TAGS_FILE) ? JSON.parse(fs.readFileSync(TAGS_FILE, 'utf8')) : {};
+for (const e of events) if (manualTags[e.dedupe_key]) e.niches = [...new Set([...(e.niches || []), ...manualTags[e.dedupe_key]])];
 fs.writeFileSync(GEO_CACHE, JSON.stringify(geo));
 fs.writeFileSync(OUT, JSON.stringify(events, null, 1));
 const n = (f) => events.filter(f).length;
